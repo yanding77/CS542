@@ -1,0 +1,15 @@
+{
+  "name": "databaseproj",
+  "version": "1.0.0",
+  "description": "CS542 Project",
+  "main": "index.js",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Yanding Yin",
+  "license": "ISC"
+}
