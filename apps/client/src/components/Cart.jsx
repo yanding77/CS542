@@ -22,7 +22,7 @@ function Cart({ cart }) {
 
     return (
         <div style={{ fontFamily: 'Georgia, serif', maxWidth: '500px', margin: '0 auto' }}>
-            <h2 style={{ textAlign: 'center', fontSize: '24px' }}>Tu Orden</h2>
+            <h2 style={{ textAlign: 'center', fontSize: '24px' }}>Tu Orden!!</h2>
             {groupedItems.length === 0 ? (
                 <p style={{ fontSize: '18px', marginBottom: '5px', paddingLeft: '20px' }}>
                     -Tu carrito está vacío-
