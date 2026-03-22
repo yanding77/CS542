@@ -7,6 +7,8 @@
     "apps/*"
   ],
   "scripts": {
+    "dev": "npm run dev -w client",
+    "clean" : "rm -rf node_modules package-lock.json apps/*/dist apps/*/node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
