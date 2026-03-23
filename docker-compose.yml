@@ -1,0 +1,8 @@
+name: CS542 Project
+
+services:
+
+  database:
+    image: postgres:16-alpine
+    container_name: orders-database
+    restart: always
