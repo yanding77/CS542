@@ -5,11 +5,14 @@ Architecture Overview
 This project is structured as a Monorepo to ensure type safety and seamless coordination between the frontend and backend.
 
 apps/client: A high-performance React application powered by Vite.
-apps/server: (debating weather implementing nestjs or stick with express)
+
+apps/server: nest js application
 
 Prerequisites
 Before starting, ensure your environment matches our production specifications:
+
 Node.js: v22.12.0 or higher 
+
 Package Manager: npm 
 
 Installation
