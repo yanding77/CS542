@@ -1,0 +1,90 @@
+CREATE TABLE Account(
+accountID INT,
+login CHAR(50),
+password CHAR(50),
+restaurantName CHAR(50),
+PRIMARY KEY(accountID));
+
+CREATE TABLE Worker() 
+INHERITS(Account);
+
+CREATE TABLE Owner() 
+INHERITS(Account);
+
+CREATE TABLE Orders(
+orderID SERIAL PRIMARY KEY,
+startTime DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+endTime DATE,
+status VARCHAR(50));
+
+CREATE TABLE Location(
+lAddress CHAR(200),
+PRIMARY KEY(lAddress));
+
+CREATE TABLE Tables(
+tableNumber INT,
+lAddress CHAR(200),
+qrCode CHAR,
+PRIMARY KEY(lAddress, tableNumber),
+FOREIGN KEY(lAddress) REFERENCES Location(lAddress));
+
+CREATE TABLE Menu(
+menuID SERIAL PRIMARY KEY,
+name CHAR(20));
+
+CREATE TABLE Combos(
+comboID SERIAL PRIMARY KEY,
+name CHAR(20),
+price REAL);
+
+CREATE TABLE OrderCombo(
+comboID INT,
+orderID INT,
+dietaryRestrictions CHAR(100),
+quantity INT,
+PRIMARY KEY(comboID, orderID),
+FOREIGN KEY(comboID) REFERENCES Combos(comboID),
+FOREIGN KEY(orderID) REFERENCES Orders(orderID));
+
+CREATE TABLE Deal(
+dealID SERIAL PRIMARY KEY,
+name CHAR(20),
+price REAL,
+startTime DATE,
+endTime DATE);
+
+CREATE TABLE Item(
+itemID INT,
+name CHAR(50),
+price REAL,
+PRIMARY KEY(itemID));
+
+CREATE TABLE Entree(
+description CHAR(200),
+preparationTime INT) 
+INHERITS(Item);
+
+CREATE TABLE Side() 
+INHERITS(Item);
+
+CREATE TABLE Drink(
+refillable BOOLEAN) 
+INHERITS(Item);
+
+CREATE TABLE Alcohol(
+alcoholContent REAL) 
+INHERITS(Item);
+
+CREATE TABLE Appetizer(
+description CHAR(200),
+preparationTime INT) 
+INHERITS(Item);
+
+CREATE TABLE Dessert(
+description CHAR(200),
+preparationTime INT)
+INHERITS(Item);
+
+CREATE TABLE Allergen(
+name CHAR(20),
+PRIMARY KEY(name));
