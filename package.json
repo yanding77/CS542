@@ -19,6 +19,7 @@
   "author": "Yanding Yin",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "pg": "^8.20.0"
   }
 }
