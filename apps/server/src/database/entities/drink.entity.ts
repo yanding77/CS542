@@ -1,8 +1,8 @@
 import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { Item } from './item.entity';
 
-@Entity('entrees')
-export class Entree {
+@Entity('drinks')
+export class Drink {
     @PrimaryColumn('uuid')
     id: string;
 
@@ -11,7 +11,7 @@ export class Entree {
     item: Item;
 
     @Column()
-    description: string;
+    refillable: boolean;
 
     @CreateDateColumn()
     created_at: Date;

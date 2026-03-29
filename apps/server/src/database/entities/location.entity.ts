@@ -17,7 +17,7 @@ export class Location {
     @Column()
     password_hash: string;
 
-    @Column({ nullable: true })
+    @Column()
     address: string;
 
     @CreateDateColumn()

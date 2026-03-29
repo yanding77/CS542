@@ -1,8 +1,8 @@
 import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { Item } from './item.entity';
 
-@Entity('entrees')
-export class Entree {
+@Entity('appetizers')
+export class Appetizer {
     @PrimaryColumn('uuid')
     id: string;
 
