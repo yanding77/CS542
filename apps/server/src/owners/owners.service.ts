@@ -1,23 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Owner } from '../database/entities/owner.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class OwnersService {
-    constructor(private db: DatabaseService) {}
+    constructor(
+        @InjectRepository(Owner)
+        private ownerRepo: Repository<Owner>,
+    ) {}
 
     async createOwner(email: string, password: string, restaurantName: string) {
-        const client = this.db.getClient();
-
-        // 🔐 hash password HERE
         const passwordHash = await bcrypt.hash(password, 10);
 
-        await client.query(`
-            INSERT INTO owners (email, password_hash, restaurant_name)
-            VALUES ($1, $2, $3)`,
-            [email, passwordHash, restaurantName],
-        );
+        const owner = this.ownerRepo.create({
+            email: email.toLowerCase(), // make email lowercase for consistency
+            password_hash: passwordHash,
+            restaurant_name: restaurantName,
+        });
+
+        await this.ownerRepo.save(owner);
 
         return { message: 'Owner created' };
+    }
+
+    async findOwnerByEmail(email: string) {
+        return this.ownerRepo.findOne({ where: { email: email.toLowerCase() } });
     }
 }

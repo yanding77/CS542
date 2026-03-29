@@ -1,19 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Location } from '../database/entities/location.entity';
+import { Owner } from '../database/entities/owner.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class LocationsService {
-    constructor(private db: DatabaseService) {}
+    constructor(
+        @InjectRepository(Location)
+        private locationRepo: Repository<Location>,
 
-    async createLocation(username: string, password: string, ownerId: string, address: string) {
-        const client = this.db.getClient();
+        @InjectRepository(Owner)
+        private ownerRepo: Repository<Owner>, // Needed if you want to link owner
+    ) {}
+
+    async createLocation(
+        username: string,
+        password: string,
+        ownerId: string,
+        address?: string,
+    ) {
         const passwordHash = await bcrypt.hash(password, 10);
 
-        await client.query(`
-            INSERT INTO locations (username, password_hash, owner_id, address)
-            VALUES ($1, $2, $3, $4)`,
-            [username, passwordHash, ownerId, address],
-        );
+        const location = this.locationRepo.create({
+            username,
+            password_hash: passwordHash,
+            address,
+            owner: { id: ownerId },
+        });
+
+        await this.locationRepo.save(location);
+
+        return { message: 'Location created' };
+    }
+
+    async findLocationByUsername(username: string) {
+        return this.locationRepo.findOne({ where: { username } });
     }
 }
