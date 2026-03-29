@@ -38,7 +38,6 @@ export class DatabaseService implements OnModuleInit {
             CREATE TABLE IF NOT EXISTS locations (
                 id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                 owner_id UUID REFERENCES owners(id) ON DELETE CASCADE,
-                name VARCHAR(255) NOT NULL,
                 address TEXT,
                 username VARCHAR(255) UNIQUE NOT NULL,
                 password_hash VARCHAR(255) NOT NULL,

@@ -7,8 +7,8 @@ import { OwnersModule } from './owners/owners.module';
 import { LocationsModule } from './locations/locations.module';
 
 @Module({
-  imports: [AuthModule, OwnersModule, LocationsModule],
+  imports: [DatabaseModule, AuthModule, OwnersModule, LocationsModule],
   controllers: [AppController],
-  providers: [AppService, DatabaseModule],
+  providers: [AppService],
 })
 export class AppModule {}

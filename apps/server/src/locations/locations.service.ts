@@ -6,14 +6,14 @@ import * as bcrypt from 'bcrypt';
 export class LocationsService {
     constructor(private db: DatabaseService) {}
 
-    async createLocation(username: string, password: string, ownerId: string) {
+    async createLocation(username: string, password: string, ownerId: string, address: string) {
         const client = this.db.getClient();
         const passwordHash = await bcrypt.hash(password, 10);
 
         await client.query(`
-            INSERT INTO locations (username, password_hash, owner_id)
-            VALUES ($1, $2, $3)`,
-            [username, passwordHash, ownerId],
+            INSERT INTO locations (username, password_hash, owner_id, address)
+            VALUES ($1, $2, $3, $4)`,
+            [username, passwordHash, ownerId, address],
         );
     }
 }

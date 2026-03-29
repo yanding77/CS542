@@ -7,11 +7,11 @@ export class LocationsController {
     constructor(private readonly locationsService: LocationsService) {}
 
     @Post('register')
-    async register(@Body() body: { username: string; password: string; ownerId: string }) {
-        const { username, password, ownerId } = body;
+    async register(@Body() body: { username: string; password: string; ownerId: string; address: string }) {
+        const { username, password, ownerId, address } = body;
 
         // Call service to create location
-        await this.locationsService.createLocation(username, password, ownerId);
+        await this.locationsService.createLocation(username, password, ownerId, address);
 
         return { message: 'Location registered successfully' };
     }

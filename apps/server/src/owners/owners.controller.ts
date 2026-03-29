@@ -23,6 +23,7 @@ export class OwnersController {
             throw new ForbiddenException('Access denied');
         }
 
-        return { message: `Welcome Owner ${req.user.sub}!`}
+        // You can fetch location-specific data here
+        return { message: `Welcome Owner ${req.user.sub}!` };
     }
 }

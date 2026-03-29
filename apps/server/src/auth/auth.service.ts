@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -10,64 +11,82 @@ export class AuthService {
         private jwtService: JwtService,
     ) {}
 
-    async validateUser(username: string, password: string) {
-        const client = this.db.getClient();
+    async validateUser(username: string, password: string, role: string) {
+        try {
+            console.log('VALIDATE:', username, role);
 
-        // 🔍 Check owners first
-        const ownerRes = await client.query(
-            'SELECT * FROM owners WHERE email = $1',
-            [username],
-        );
+            const client = this.db.getClient();
+            let accRes;
 
-        if (ownerRes.rows.length > 0) {
-            const owner = ownerRes.rows[0];
+            if (role === 'owner') {
+                accRes = await client.query(
+                    'SELECT * FROM owners WHERE LOWER(email) = LOWER($1)',
+                    [username],
+                );
+            } else if (role === 'location') {
+                accRes = await client.query(
+                    'SELECT * FROM locations WHERE LOWER(username) = LOWER($1)',
+                    [username],
+                );
+            } else {
+                return null;
+            }
 
-            const valid = await bcrypt.compare(password, owner.password_hash);
+            console.log('QUERY RESULT:', accRes.rows);
+
+            if (!accRes || accRes.rows.length === 0) {
+                return null;
+            }
+
+            const account = accRes.rows[0];
+
+            console.log('ACCOUNT FOUND:', account);
+
+            const valid = await bcrypt.compare(password, account.password_hash);
+
+            console.log('PASSWORD VALID:', valid);
+
             if (!valid) return null;
 
             return {
-                id: owner.id,
-                role: 'owner',
-                email: owner.email,
+                id: account.id,
+                role,
             };
+
+        } catch (err) {
+            console.error('🔥 VALIDATE ERROR:', err);
+            throw err;
         }
-
-        // 🔍 Check locations
-        const locRes = await client.query(
-            'SELECT * FROM locations WHERE username = $1',
-            [username],
-        );
-
-        if (locRes.rows.length > 0) {
-            const loc = locRes.rows[0];
-
-            const valid = await bcrypt.compare(password, loc.password_hash);
-            if (!valid) return null;
-
-            return {
-                id: loc.id,
-                role: 'location',
-                ownerId: loc.owner_id,
-            };
-        }
-
-        return null;
     }
 
-    async login(username: string, password: string) {
-        const user = await this.validateUser(username, password);
+    async login(body: any) {
+        try {
+            console.log('LOGIN BODY:', body);
 
-        if (!user) {
-            throw new Error('Invalid credentials');
+            const { email, username, password, role } = body;
+
+            const user = await this.validateUser(
+                email || username,
+                password,
+                role
+            );
+
+            if (!user) {
+                throw new UnauthorizedException('Invalid credentials');
+            }
+
+            const payload = {
+                sub: user.id,
+                role: user.role,
+            };
+
+            return {
+                access_token: this.jwtService.sign(payload),
+            };
+
+        } catch (err) {
+            console.error('LOGIN ERROR:', err);
+            throw err;
         }
-
-        const payload = {
-            sub: user.id,
-            role: user.role,
-        };
-
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
     }
 }

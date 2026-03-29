@@ -22,12 +22,20 @@ export default function OwnerDashboard() {
             setData(data);
         };
 
+
         void fetchDashboard();
     }, []);
+
+    const handleLogout = () => {
+        // Remove JWT token
+        localStorage.removeItem('jwt');
+        window.location.href = '/login';
+    };
 
     return (
         <div>
             <h2>Owner Dashboard</h2>
+            <button onClick={handleLogout}>Logout</button>
             <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>
     );
