@@ -4,7 +4,6 @@ import MenuItems from './components/MenuItems';
 import Cart from './components/Cart';
 import Payment from './components/Payment';
 import Footer from './components/footer';
-import './App.css';
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
