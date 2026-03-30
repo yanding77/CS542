@@ -4,6 +4,7 @@ export default function OwnerDashboard() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
+        // redirects to the /locations/dashboard directory if login credentials are correct
         const fetchDashboard = async () => {
             const token = localStorage.getItem('jwt');
 
@@ -13,11 +14,13 @@ export default function OwnerDashboard() {
                 },
             });
 
+            // If credentials are invalid, give an error
             if (!res.ok) {
                 console.error('Unauthorized');
                 return;
             }
 
+            // if successful, set data to their data for their dashboard
             const data = await res.json();
             setData(data);
         };
@@ -26,6 +29,7 @@ export default function OwnerDashboard() {
         void fetchDashboard();
     }, []);
 
+    // logs out account back to /login
     const handleLogout = () => {
         // Remove JWT token
         localStorage.removeItem('jwt');

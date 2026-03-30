@@ -6,11 +6,12 @@ import { AuthGuard } from '@nestjs/passport';
 export class LocationsController {
     constructor(private readonly locationsService: LocationsService) {}
 
+    // route is /locations/register
     @Post('register')
     async register(@Body() body: { username: string; password: string; ownerId: string; address: string }) {
         const { username, password, ownerId, address } = body;
 
-        // Call service to create location
+        // call service to create location
         await this.locationsService.createLocation(username, password, ownerId, address);
 
         return { message: 'Location registered successfully' };
@@ -23,7 +24,7 @@ export class LocationsController {
             throw new ForbiddenException('Access denied');
         }
 
-        // You can fetch location-specific data here
+        // TODO: remove after testing
         return { message: `Welcome Location ${req.user.sub}!` };
     }
 }

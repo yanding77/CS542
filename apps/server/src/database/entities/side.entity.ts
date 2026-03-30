@@ -6,7 +6,7 @@ export class Side {
     @PrimaryColumn('uuid')
     id: string;
 
-    @OneToOne(() => Item, (item) => item.side, { onDelete: 'CASCADE' })
+    @OneToOne(() => Item, { onDelete: 'CASCADE' })
     @JoinColumn()
     item: Item;
 

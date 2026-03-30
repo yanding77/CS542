@@ -6,9 +6,11 @@ export default function OwnerLogin() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    // handles login for owner accounts
     const handleLogin = async (e) => {
         e.preventDefault();
 
+        // send login details to backend
         const res = await fetch('http://localhost:3000/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -17,6 +19,7 @@ export default function OwnerLogin() {
 
         const data = await res.json();
 
+        // if not valid, return reason why
         if (!res.ok) {
             alert(data.message);
             return;
@@ -24,6 +27,7 @@ export default function OwnerLogin() {
 
         const payload = JSON.parse(atob(data.access_token.split('.')[1]));
 
+        // return out if the role of the login is not an owner account
         if (payload.role !== 'owner') {
             alert('Not an owner account');
             return;
@@ -32,6 +36,7 @@ export default function OwnerLogin() {
         localStorage.setItem('jwt', data.access_token);
         localStorage.setItem('role', payload.role);
 
+        // go to owner dashboard if credentials checkout
         navigate('/owner/dashboard');
     };
 

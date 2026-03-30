@@ -15,7 +15,7 @@ export class OwnersService {
         const passwordHash = await bcrypt.hash(password, 10);
 
         const owner = this.ownerRepo.create({
-            email: email.toLowerCase(), // make email lowercase for consistency
+            email: email.toLowerCase(), // lowercase for consistency
             password_hash: passwordHash,
             restaurant_name: restaurantName,
         });

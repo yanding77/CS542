@@ -1,12 +1,13 @@
 import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { Item } from './item.entity';
 
+// alcoholicDrinks(id <=FK= item, alcoholContent, created_at)
 @Entity('alcoholicDrinks')
 export class Alcohol {
     @PrimaryColumn('uuid')
     id: string;
 
-    @OneToOne(() => Item, (item) => item.entree, { onDelete: 'CASCADE' })
+    @OneToOne(() => Item, { onDelete: 'CASCADE' })
     @JoinColumn()
     item: Item;
 

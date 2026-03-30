@@ -1,5 +1,7 @@
-import {Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn, ManyToOne} from 'typeorm';
+import {Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn, ManyToOne, OneToMany} from 'typeorm';
 import {Location} from "./location.entity";
+import {DealItem} from "./deal_item.entity";
+import {DealCombo} from "./deal_combo.entity";
 
 @Entity('deals')
 export class Deal {
@@ -11,6 +13,14 @@ export class Deal {
 
     @Column()
     name: string;
+
+    @OneToMany(() => DealItem, (dealItem) => dealItem.deal,
+        { nullable: true })
+    dealItems: DealItem[];
+
+    @OneToMany(() => DealCombo, (dealCombo) => dealCombo.deal,
+        { nullable: true })
+    dealCombos: DealCombo[];
 
     @Column()
     startDate: Date;

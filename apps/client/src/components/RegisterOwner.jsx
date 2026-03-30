@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// function to create a new owner
 export default function RegisterOwner() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,6 +17,7 @@ export default function RegisterOwner() {
             return;
         }
 
+        // need to send email, restaurant name, password, and confirmed password to create account
         const res = await fetch('http://localhost:3000/owners/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -24,11 +26,13 @@ export default function RegisterOwner() {
 
         const data = await res.json();
 
+        // return error if information is not valid
         if (!res.ok) {
             alert(data.message);
             return;
         }
 
+        // notify them that their account was created and kick them to login page
         alert('Account created!');
         navigate('/login');
     };

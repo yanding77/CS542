@@ -12,7 +12,7 @@ export class LocationsService {
         private locationRepo: Repository<Location>,
 
         @InjectRepository(Owner)
-        private ownerRepo: Repository<Owner>, // Needed if you want to link owner
+        private ownerRepo: Repository<Owner>, // Needed for linking owner
     ) {}
 
     async createLocation(

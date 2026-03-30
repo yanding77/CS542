@@ -12,7 +12,7 @@ import {LocationsService} from "../locations/locations.service";
     imports: [
         PassportModule,
         JwtModule.register({
-            secret: 'secret',          // move to .env in production
+            secret: 'secret',          // TODO: move to .env in production
             signOptions: { expiresIn: '1h' },  // token expiration
         }),
         DatabaseModule,

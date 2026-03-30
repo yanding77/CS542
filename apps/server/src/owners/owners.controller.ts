@@ -6,11 +6,12 @@ import {AuthGuard} from '@nestjs/passport';
 export class OwnersController {
     constructor(private readonly ownersService: OwnersService) {}
 
+    // route is /owners/register
     @Post('register')
     async register(@Body() body: { email: string; password: string; restaurantName: string }) {
         const { email, password, restaurantName } = body;
 
-        // Call service to create owner
+        // call service to create owner
         await this.ownersService.createOwner(email, password, restaurantName);
 
         return { message: 'Owner registered successfully' };
@@ -23,7 +24,7 @@ export class OwnersController {
             throw new ForbiddenException('Access denied');
         }
 
-        // You can fetch location-specific data here
+        // TODO: delete when done testing
         return { message: `Welcome Owner ${req.user.sub}!` };
     }
 }

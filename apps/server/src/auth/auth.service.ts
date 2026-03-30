@@ -12,6 +12,7 @@ export class AuthService {
         private jwtService: JwtService,
     ) {}
 
+    // function for validating account info on login
     async validateUser(username: string, password: string, role: string) {
         let account;
 
@@ -34,6 +35,7 @@ export class AuthService {
         };
     }
 
+    // used to check if entered values log into an account
     async login(body: any) {
         const { email, username, password, role } = body;
 

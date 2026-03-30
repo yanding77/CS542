@@ -15,11 +15,19 @@ import {Deal} from "./entities/deal.entity";
 import {Combo} from "./entities/combo.entity";
 import {Table} from "./entities/table.entity";
 import {Order} from "./entities/order.entity";
+import {MenuItem} from "./entities/menu_item.entity";
+import {ComboItem} from "./entities/combo_item.entity";
+import {DealItem} from "./entities/deal_item.entity";
+import {ItemAllergen} from "./entities/item_allergen.entity";
+import {MenuCombo} from "./entities/menu_combo.entity";
+import {DealCombo} from "./entities/deal_combo.entity";
+import {TableOrder} from "./entities/table_order.entity";
+import {OrderItem} from "./entities/order_item.entity";
 
 @Global()
 @Module({
     imports: [
-        TypeOrmModule.forRoot({
+        TypeOrmModule.forRoot({ // TODO: all of these need to be moved to .env at some point
             type: 'postgres',
             host: process.env.DB_HOST || 'localhost',
             port: Number(process.env.DB_PORT) || 5432,
@@ -27,11 +35,13 @@ import {Order} from "./entities/order.entity";
             password: process.env.DB_PASSWORD || 'password123',
             database: process.env.DB_NAME || 'restaurantDB',
             entities: [Owner, Location, Menu, Item, Side, Entree, Drink,
-                Appetizer, Dessert, Alcohol, Allergen, Deal, Combo, Table, Order],
+                Appetizer, Dessert, Alcohol, Allergen, Deal, Combo, Table, Order,
+                MenuItem, ComboItem, DealItem, ItemAllergen, MenuCombo, DealCombo, TableOrder, OrderItem],
             synchronize: true, // auto-create tables in dev (disable in production)
         }),
         TypeOrmModule.forFeature([Owner, Location, Menu, Item, Side, Entree, Drink,
-            Appetizer, Dessert, Alcohol, Allergen, Deal, Combo, Table, Order]),
+            Appetizer, Dessert, Alcohol, Allergen, Deal, Combo, Table, Order,
+            MenuItem, ComboItem, DealItem, ItemAllergen, MenuCombo, DealCombo, TableOrder, OrderItem]),
     ],
     exports: [TypeOrmModule],
 })

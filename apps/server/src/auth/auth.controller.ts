@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
     constructor(private authService: AuthService) {}
 
+    // route is /auth/login
     @Post('login')
     login(@Body() body: any) {
         return this.authService.login(body);

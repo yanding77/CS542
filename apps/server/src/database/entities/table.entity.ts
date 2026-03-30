@@ -1,12 +1,16 @@
-import {Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn, ManyToOne} from 'typeorm';
+import {Entity, Column, JoinColumn, CreateDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Location} from "./location.entity";
+import {TableOrder} from "./table_order.entity";
 
 @Entity('tables')
 export class Table {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column()
     number: number;
 
-    @PrimaryColumn()
+    @Column()
     locationId: string;
 
     @ManyToOne(() => Location, (location) => location.menus, { onDelete: 'CASCADE' })
@@ -15,6 +19,10 @@ export class Table {
 
     @Column()
     qrCodeData: string;
+
+    @OneToMany(() => TableOrder, (tableOrder) => tableOrder.table,
+        { nullable: true })
+    tableOrders: TableOrder[];
 
     @CreateDateColumn()
     created_at: Date;

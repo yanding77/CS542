@@ -6,7 +6,7 @@ export class Entree {
     @PrimaryColumn('uuid')
     id: string;
 
-    @OneToOne(() => Item, (item) => item.entree, { onDelete: 'CASCADE' })
+    @OneToOne(() => Item, { onDelete: 'CASCADE' })
     @JoinColumn()
     item: Item;
 
