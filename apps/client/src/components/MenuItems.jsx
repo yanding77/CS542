@@ -1,4 +1,12 @@
-export default function MenuItems({ menuItems }) {
+export default function MenuItems({ menuItems, itemRefs }) {
+    const getCategoryId = (category) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
+
+    const registerRef = (el, category, isFirst) => {
+        if (isFirst && el) {
+            const catId = getCategoryId(category);
+            itemRefs.current[catId] = el;
+        }
+    };
     return (
         <main className="
         bg-[#05161A] rounded-[10px]
@@ -7,9 +15,12 @@ export default function MenuItems({ menuItems }) {
         border-[5px] border-[#f8f9f9]
         ">
         <ul className="list-none">
-            {menuItems.map((item) => (
+            {menuItems.map((item, index) => {
+                const isFirst = index === 0 || menuItems[index - 1].category !== item.category;
+                return(
                 <li
                     key={item.name}
+                    ref={(el) => registerRef(el, item.category, isFirst)}
                     data-category={item.category}
                     className="pb-5 border-b border-[#ddd] mb-5 px-4"
                 >
@@ -42,7 +53,7 @@ export default function MenuItems({ menuItems }) {
                         </button>
                     </div>
                 </li>
-            ))}
+            )})}
         </ul>
             </main>
     );

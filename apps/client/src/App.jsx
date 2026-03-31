@@ -3,13 +3,27 @@ import MenuCategories from './components/MenuCategories';
 import {categories, menu} from "./data/items.js";
 import MenuItems from './components/MenuItems';
 import bgImage from '/pics/kk.jpeg';
+import {useState, useRef} from "react";
+
 
 export default function App() {
-  const selectedCategory = 'Tacos';
+    const [selectedCategory, setSelectedCategory] = useState('Entradas');
+    const itemRefs = useRef({});
 
-  const handleSelectCategory = (category) => {
-    console.log(category);
-  };
+    const getCategoryId = (category) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
+
+    const handleSelectCategory = (category) => {
+        setSelectedCategory(category);
+        const catId = getCategoryId(category);
+        const node = itemRefs.current[catId];
+
+        if (node) {
+            node.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
 
   return (
       <div className="font-serif bg-[#f8f9f9] text-[#2a2a2a]">
@@ -22,7 +36,7 @@ export default function App() {
                   onSelectCategory={handleSelectCategory}
                   backgroundImage={bgImage}
               />
-              <MenuItems menuItems={menu} />
+              <MenuItems menuItems={menu} itemRefs={itemRefs} />
           </div>
       </div>
   );
