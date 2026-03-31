@@ -13,7 +13,7 @@
     "dev:server": "npm run start:dev -w server",
     "dev": "npm run db:up && concurrently -n \"NEST,VITE\" -c \"magenta,cyan\" \"npm run dev:server\" \"npm run dev:client\"",
     "clean": "rm -rf node_modules package-lock.json apps/*/dist apps/*/node_modules",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test -w client"
   },
   "keywords": [],
   "author": "Yanding Yin",
