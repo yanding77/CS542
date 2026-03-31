@@ -7,7 +7,7 @@ export default function MenuCategories({
     return (
         <aside
             className="
-                    h-[60vh] min-h-0
+                    h-[70vh] min-h-0
                     overflow-y-auto overflow-x-hidden
                     rounded-[10px]
                     border-[5px] border-[#f8f9f9]
@@ -28,7 +28,7 @@ export default function MenuCategories({
                                 onClick={() => onSelectCategory(category)}
                                 className={`
                                     w-[90%] text-center cursor-pointer uppercase
-                                    font-extrabold text-[#5c3d2e]
+                                    font-extrabold 
                                     rounded-[10px]
                                     my-[10px]
                                     mb-[10px]
