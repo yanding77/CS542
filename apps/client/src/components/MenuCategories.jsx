@@ -8,12 +8,11 @@ export default function MenuCategories({
         <aside
             className="
                     h-[70vh] min-h-0
-                    overflow-y-auto overflow-x-hidden
+                    overflow-y-auto
                     rounded-[10px]
                     border-[5px] border-[#f8f9f9]
                     shadow-lg
-                    bg-cover bg-center bg-no-repeat
-                    scrollbar-hide"
+                    bg-cover bg-center bg-no-repeat"
             style={{
                 backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
             }}
