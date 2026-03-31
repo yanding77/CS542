@@ -1,88 +1,49 @@
-import React from 'react';
-
-function MenuItems({ menuItems, onAddToCart, onRemoveFromCart, itemQuantities }) {
+export default function MenuItems({ menuItems }) {
     return (
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-            {menuItems.map((item, index) => (
+        <main className="
+        bg-[#05161A] rounded-[10px]
+        h-[70vh] min-h-0
+        overflow-y-auto
+        border-[5px] border-[#f8f9f9]
+        ">
+        <ul className="list-none">
+            {menuItems.map((item) => (
                 <li
                     key={item.name}
                     data-category={item.category}
-                    className="large-item-name"
-                    style={{
-                        paddingBottom: '20px',
-                        borderBottom: '1px solid #ddd',
-                    }}
+                    className="pb-5 border-b border-[#ddd] mb-5 px-4"
                 >
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginBottom: '10px',
-                        }}
-                    >
-                        <span>{item.name} - ${item.price.toFixed(2)}</span>
-                    </div>
+                    <span className="font-extrabold text-[1.2rem] text-[#f5ebd5]">
+                        {item.name} - ${item.price.toFixed(2)}
+                    </span>
 
-                    <div style={{ marginBottom: '20px' }}>
-                        {item.image && (
+                    {item.image && (
+                        <div className="my-4">
                             <img
-                                src={`http://localhost:5001/photos/${item.image}`}
-                                alt={item.name || 'Menu Item'}
-                                style={{
-                                    width: '100%',
-                                    maxWidth: '700px',
-                                    borderRadius: '10px',
-                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                                    objectFit: 'cover',
-                                    display: 'block',
-                                    margin: '10px auto 0',
-                                    border: '1px solid #ddd',
-                                }}
+                                src={`${item.image}`}
+                                alt={item.name}
+                                className="
+                                    w-full max-w-[700px]
+                                    rounded-[10px]
+                                    shadow-[0_4px_8px_rgba(0,0,0,0.1)]
+                                    object-cover
+                                    block mx-auto
+                                    border border-[#ddd]"
                             />
-                        )}
-                    </div>
+                        </div>
+                    )}
 
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '10px',
-                        }}
-                    >
-                        <Button
-                            style={{
-                                backgroundColor: '#f5ebd5',
-                                border: 'none',
-                                color: '#000',
-                            }}
-                            variant="success"
-                            onClick={() => onAddToCart(item)}
-                        >
+                    <div className="flex justify-center items-center gap-[10px] mt-3">
+                        <button className="bg-[#f5ebd5] text-black px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer">
                             +
-                        </Button>
-                        {itemQuantities[item.name] > 0 && (
-                            <>
-                                <span style={{ margin: '0 10px' }}>{itemQuantities[item.name]}</span>
-                                <Button
-                                    style={{
-                                        backgroundColor: '#e74c3c',
-                                        border: 'none',
-                                        color: '#fff',
-                                    }}
-                                    variant="danger"
-                                    onClick={() => onRemoveFromCart(item)}
-                                >
-                                    -
-                                </Button>
-                            </>
-                        )}
+                        </button>
+                        <button className="bg-[#e74c3c] text-white px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer">
+                            -
+                        </button>
                     </div>
                 </li>
             ))}
         </ul>
+            </main>
     );
 }
-
-export default MenuItems;

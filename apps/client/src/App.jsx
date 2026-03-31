@@ -1,6 +1,7 @@
 import Header from './components/Header';
 import MenuCategories from './components/MenuCategories';
-import {categories} from "./data/items.js";
+import {categories, menu} from "./data/items.js";
+import MenuItems from './components/MenuItems';
 import bgImage from '/pics/kk.jpeg';
 
 export default function App() {
@@ -21,8 +22,7 @@ export default function App() {
                   onSelectCategory={handleSelectCategory}
                   backgroundImage={bgImage}
               />
-          <main className="bg-[#05161A] rounded-[10px]">
-          </main>
+              <MenuItems menuItems={menu} />
           </div>
       </div>
   );
