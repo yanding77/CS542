@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const Payment = ({ cartItems, onClearCart }) => {
     const [paymentData, setPaymentData] = useState({ amount: 0, items: [] });

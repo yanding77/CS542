@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import {describe, it, expect, vi, afterEach} from "vitest";
-import App from "../src/app";
+import App from "../src/App.js";
 import * as matchers from '@testing-library/jest-dom/matchers'; // Import matchers
-import MenuCategories from "../src/components/MenuCategories.jsx";
+import MenuCategories from "../src/components/MenuCategories.tsx";
 
 expect.extend(matchers);
 

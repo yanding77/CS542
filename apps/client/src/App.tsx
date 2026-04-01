@@ -1,18 +1,18 @@
 import Header from './components/Header';
 import MenuCategories from './components/MenuCategories';
-import {categories, menu} from "./data/items.js";
+import {categories, menu} from "./data/items.ts";
 import MenuItems from './components/MenuItems';
-import bgImage from '/pics/kk.jpeg';
 import {useState, useRef} from "react";
+import type {menuRefs} from "./types/menuTypes.ts";
 
 
 export default function App() {
     const [selectedCategory, setSelectedCategory] = useState('Entradas');
-    const itemRefs = useRef({});
+    const itemRefs = useRef<menuRefs>({});
 
-    const getCategoryId = (category) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
+    const getCategoryId = (category: string) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
 
-    const handleSelectCategory = (category) => {
+    const handleSelectCategory = (category: string) => {
         setSelectedCategory(category);
         const catId = getCategoryId(category);
         const node = itemRefs.current[catId];
@@ -34,7 +34,6 @@ export default function App() {
                   categories={categories}
                   selectedCategory={selectedCategory}
                   onSelectCategory={handleSelectCategory}
-                  backgroundImage={bgImage}
               />
               <MenuItems menuItems={menu} itemRefs={itemRefs} />
           </div>

@@ -1,4 +1,3 @@
-import React from "react";
 
 const Footer = () => {
     return (
@@ -11,7 +10,7 @@ const Footer = () => {
                 <a
                     href="fb://page/LaBalsa.ec"
                     style={styles.button}
-                    onClick={(e) => {
+                    onClick={() => {
                         setTimeout(() => {
                             window.location.href = "https://www.facebook.com/LaBalsa.ec/";
                         }, 500);
@@ -21,7 +20,7 @@ const Footer = () => {
                 <a
                     href="instagram://user?username=labalsa.ec"
                     style={styles.button}
-                    onClick={(e) => {
+                    onClick={() => {
                         setTimeout(() => {
                             window.location.href = "https://www.instagram.com/labalsa.ec/";
                         }, 500);

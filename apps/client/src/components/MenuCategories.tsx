@@ -1,9 +1,12 @@
+import bgImage from '/pics/kk.jpeg';
+
+import type {menuCategoriesProps} from "../types/menuTypes.ts";
+
 export default function MenuCategories({
                                            categories,
                                            selectedCategory,
-                                           onSelectCategory,
-                                           backgroundImage,
-                                       }) {
+                                           onSelectCategory
+                                       }: menuCategoriesProps) {
     return (
         <aside
             className="
@@ -14,11 +17,11 @@ export default function MenuCategories({
                     shadow-lg
                     bg-cover bg-center bg-no-repeat"
             style={{
-                backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
+                backgroundImage: `url(${bgImage})`,
             }}
         >
             <ul className=" list-none">
-                {categories.map((category) => {
+                {categories.map((category: string) => {
                     const isActive = category === selectedCategory;
 
                     return (

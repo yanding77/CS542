@@ -1,5 +1,5 @@
 import {describe, it, expect} from "vitest";
-import {menu, categories} from "../src/data/items.js";
+import {menu, categories} from "../src/data/items.ts";
 
 describe('unit test milestone1', () => {
     it('no negative prices', () => {

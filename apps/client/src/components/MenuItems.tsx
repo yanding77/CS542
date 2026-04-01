@@ -1,7 +1,9 @@
-export default function MenuItems({ menuItems, itemRefs }) {
-    const getCategoryId = (category) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
+import type {MenuItemsProps} from "../types/menuTypes.ts";
 
-    const registerRef = (el, category, isFirst) => {
+export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
+    const getCategoryId = (category: string) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
+
+    const registerRef = (el: HTMLElement | null, category: string, isFirst: boolean) => {
         if (isFirst && el) {
             const catId = getCategoryId(category);
             itemRefs.current[catId] = el;
