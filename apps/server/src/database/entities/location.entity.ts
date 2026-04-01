@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, OneToMany } from 'typeorm';
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, OneToMany, JoinColumn} from 'typeorm';
 import { Owner } from './owner.entity';
 import { Menu } from './menu.entity';
 import { Item } from './item.entity';
+import { Table } from './table.entity';
 
 @Entity('locations')
 export class Location {
@@ -28,4 +29,7 @@ export class Location {
 
     @OneToMany(() => Item, (item) => item.location)
     items: Item[];
+
+    @OneToMany(() => Table, (table) => table.location)
+    tables: Table[];
 }

@@ -13,7 +13,7 @@ export class Table {
     @Column()
     locationId: string;
 
-    @ManyToOne(() => Location, (location) => location.menus, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Location, (location) => location.tables, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'locationId' })
     location: Location;
 
