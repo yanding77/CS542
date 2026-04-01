@@ -14,12 +14,14 @@ export class AuthService {
 
     // function for validating account info on login
     async validateUser(username: string, password: string, role: string) {
+        console.log(username, password, role);
+
         let account;
 
         if (role === 'owner') {
             account = await this.ownersService.findOwnerByEmail(username.toLowerCase());
         } else if (role === 'location') {
-            account = await this.locationService.findLocationByUsername(username.toLowerCase());
+            account = await this.locationService.findLocationByUsername(username);
         } else {
             return null;
         }

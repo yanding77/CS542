@@ -36,6 +36,6 @@ export class LocationsService {
     }
 
     async findLocationByUsername(username: string) {
-        return this.locationRepo.findOne({ where: { username } });
+        return this.locationRepo.findOne({ where: { username: username } });
     }
 }
