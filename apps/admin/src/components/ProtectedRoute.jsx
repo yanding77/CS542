@@ -7,11 +7,11 @@ export default function ProtectedRoute({ children, allowedRole }) {
 
     // if a person is not logged in, kick them to the login screen
     if (!token) {
-        return <Navigate to="/login" />;
+        return <Navigate to="/" />;
     }
 
     if (allowedRole && role !== allowedRole) {
-        return <Navigate to="/login" />;
+        return <Navigate to="/" />;
     }
 
     return children;

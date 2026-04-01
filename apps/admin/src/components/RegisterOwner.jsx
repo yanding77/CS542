@@ -34,7 +34,7 @@ export default function RegisterOwner() {
 
         // notify them that their account was created and kick them to login page
         alert('Account created!');
-        navigate('/login');
+        navigate('/');
     };
 
     return (
@@ -73,7 +73,7 @@ export default function RegisterOwner() {
                 <button type="submit">Create Account</button>
             </form>
 
-            <button onClick={() => navigate('/login')}>Back</button>
+            <button onClick={() => navigate('/')}>Back</button>
         </div>
     );
 }

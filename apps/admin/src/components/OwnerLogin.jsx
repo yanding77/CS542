@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function LocationLogin() {
-    const [username, setUsername] = useState('');
+export default function OwnerLogin() {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    // handles login for location / worker accounts
+    // handles login for owner accounts
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -14,7 +14,7 @@ export default function LocationLogin() {
         const res = await fetch('http://localhost:3000/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: username, password: password, role: 'location' }),
+            body: JSON.stringify({ email: email, password: password, role: 'owner' }), // 👈 important
         });
 
         const data = await res.json();
@@ -27,29 +27,29 @@ export default function LocationLogin() {
 
         const payload = JSON.parse(atob(data.access_token.split('.')[1]));
 
-        // return out if the role of the login is not a location account
-        if (payload.role !== 'location') {
-            alert('Not a location account');
+        // return out if the role of the login is not an owner account
+        if (payload.role !== 'owner') {
+            alert('Not an owner account');
             return;
         }
 
         localStorage.setItem('jwt', data.access_token);
         localStorage.setItem('role', payload.role);
 
-        // go to location dashboard if credentials checkout
-        navigate('/location/dashboard');
+        // go to owner dashboard if credentials checkout
+        navigate('/owner/dashboard');
     };
 
     return (
         <div>
-            <h2>Location Login</h2>
+            <h2>Owner Login</h2>
 
             <form onSubmit={handleLogin}>
                 <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
 
                 <input
@@ -62,7 +62,7 @@ export default function LocationLogin() {
                 <button type="submit">Login</button>
             </form>
 
-            <button onClick={() => navigate('/login')}>Back</button>
+            <button onClick={() => navigate('/')}>Back</button>
         </div>
     );
 }

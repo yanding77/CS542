@@ -11,6 +11,7 @@
     "db:down": "docker-compose down",
     "dev:client": "npm run dev -w client",
     "dev:server": "npm run start:dev -w server",
+    "dev:admin": "npm run dev -w admin",
     "dev": "npm run db:up && concurrently -n \"NEST,VITE\" -c \"magenta,cyan\" \"npm run dev:server\" \"npm run dev:client\"",
     "clean": "rm -rf node_modules package-lock.json apps/*/dist apps/*/node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,21 +20,6 @@
   "author": "Yanding Yin",
   "license": "ISC",
   "dependencies": {
-    "@nestjs/jwt": "^11.0.2",
-    "@nestjs/passport": "^11.0.5",
-    "@nestjs/typeorm": "^11.0.0",
-    "bcrypt": "^6.0.0",
-    "concurrently": "^9.2.1",
-    "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1",
-    "pg": "^8.20.0",
-    "react-router-dom": "^6.30.3",
-    "typeorm": "^0.3.28"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
-    "@types/passport-jwt": "^4.0.1",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3"
+    "concurrently": "^9.2.1"
   }
 }
