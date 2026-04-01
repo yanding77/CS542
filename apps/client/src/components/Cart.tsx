@@ -1,55 +1,116 @@
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {useRef} from "react";
 
 export default function Cart() {
+    const [isOpen, setIsOpen] = useState(false);
+    const isDragged = useRef(false);
+    const constraintsRef = useRef(null);
+
     return (
-        <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden border border-[#e4c9a6] font-serif">
-            {/* Header with a subtle "Shared" indicator */}
-            <div className="bg-[#f5ebd5] px-6 py-4 flex justify-between items-center">
-                <h2 className="text-2xl font-extrabold uppercase text-[#2a2a2a] tracking-tight">
-                    Tu Orden!!
-                </h2>
-                <span className="flex h-3 w-3 relative">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-        </span>
-            </div>
+            <div ref={constraintsRef} className="fixed inset-0 pointer-events-none">
+            <AnimatePresence>
+                {!isOpen && (
+                    <motion.div
+                        drag // Enables dragging
+                        dragConstraints={constraintsRef} // Keeps it on screen
+                        dragMomentum={true}
 
-            <div className="p-6">
-                {groupedItems.length === 0 ? (
-                    <div className="text-center py-10 italic text-gray-500 border-2 border-dashed border-gray-100 rounded-lg">
-                        - Tu carrito está vacío -
-                    </div>
-                ) : (
-                    <>
-                        <ul className="space-y-4 mb-6">
-                            {groupedItems.map((item, index) => (
-                                <li
-                                    key={`${item.name}-${index}`}
-                                    className="flex justify-between items-center border-b border-gray-50 pb-2 animate-in fade-in slide-in-from-right-2 duration-300"
-                                >
-                                    <div className="flex flex-col">
-                                        <span className="text-lg font-bold text-[#2a2a2a]">{item.name}</span>
-                                        <span className="text-sm text-gray-500">Cantidad: {item.quantity}</span>
-                                    </div>
-                                    <span className="text-lg font-semibold tabular-nums text-[#2a2a2a]">
-                    ${item.totalPrice.toFixed(2)}
-                  </span>
-                                </li>
-                            ))}
-                        </ul>
+                        onDragStart={ () =>{
+                            isDragged.current = true;
+                        }}
+                        onDragEnd={ () =>{
+                            setTimeout(()=>{
+                                isDragged.current = false
+                            }, 100);
+                        }}
+                        onClick={() => {
+                            if(!isDragged.current){
+                                setIsOpen(true);
+                            }
+                        }}
 
-                        <div className="pt-4 border-t-2 border-[#e4c9a6] flex justify-between items-center">
-                            <span className="text-xl font-extrabold uppercase">Total</span>
-                            <span className="text-2xl font-black text-[#2a2a2a]">
-                ${grandTotal.toFixed(2)}
-              </span>
+
+                        className="pointer-events-auto absolute bottom-10 right-10 cursor-grab active:cursor-grabbing select-none"
+
+                    >
+                        <div className="relative bg-[#ffcc00] p-5 rounded-full shadow-2xl border-4 border-white">
+                            <span className="text-3xl">🛒</span> {/* Placeholder */}
+
+                            <div className="absolute -top-2 -right-2 bg-[#e74c3c] text-white text-xs font-black w-7 h-7 rounded-full flex items-center justify-center border-2 border-white tabular-nums">
+                                3
+                            </div>
                         </div>
-
-                        <button className="w-full mt-6 bg-[#ffcc00] hover:bg-[#e6b800] text-[#2a2a2a] font-black py-3 rounded-lg shadow-lg transition-transform active:scale-95 uppercase tracking-widest">
-                            Confirmar Pedido
-                        </button>
-                    </>
+                    </motion.div>
                 )}
-            </div>
+            </AnimatePresence>
+
+            {/* 2. THE FIXED OVERLAY SCREEN */}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        // Close when clicking the backdrop
+                        onClick={() => setIsOpen(false)}
+                        className="pointer-events-auto fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+                    >
+                        {/* 3. THE CART BOX (The "Fixed Screen") */}
+                        <motion.div
+                            // Stop clicks inside the box from closing the overlay
+                            onClick={(e) => e.stopPropagation()}
+
+                            // "Pop-up" animation
+                            initial={{ y: 50, scale: 0.9, opacity: 0 }}
+                            animate={{ y: 0, scale: 1, opacity: 1 }}
+                            exit={{ y: 50, scale: 0.9, opacity: 0 }}
+                            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+
+                            className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-[#e4c9a6]"
+                        >
+                            <div className="p-5 bg-[#f5ebd5] flex justify-between items-center border-b border-[#e4c9a6]">
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => setIsOpen(false)}
+                                    className="bg-[#2a2a2a] text-white px-5 py-2 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-red-600 transition-colors"
+                                >
+                                    ← Regresar
+                                </motion.button>
+                                <h3 className="font-serif italic font-bold text-[#2a2a2a] text-lg">Tu Pedido</h3>
+                            </div>
+
+                            {/* Cart Content Area */}
+                            <div className="p-8 max-h-[60vh] overflow-y-auto font-serif">
+                                <ul className="space-y-4">
+                                    <li className="flex justify-between items-center border-b border-gray-100 pb-3">
+                                        <div className="flex flex-col">
+                                            <span className="font-bold text-[#2a2a2a]">Ceviche de Camarón</span>
+                                            <span className="text-sm text-gray-500">x2 @ $15.00</span>
+                                        </div>
+                                        <span className="font-extrabold text-lg tabular-nums">$30.00</span>
+                                    </li>
+                                </ul>
+
+                                {/* Total (Old Payment Styling) */}
+                                <div className="mt-8 pt-5 border-t-2 border-[#e4c9a6] flex justify-between items-center">
+                                    <span className="font-black text-xl uppercase tracking-tighter">Total a Pagar</span>
+                                    <span className="text-3xl font-black text-[#2a2a2a] tabular-nums">$30.00</span>
+                                </div>
+
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="w-full mt-8 bg-[#ffcc00] hover:bg-[#e6b800] text-[#2a2a2a] font-black py-4 rounded-xl shadow-lg uppercase tracking-widest text-sm"
+                                >
+                                    Confirmar Pedido!
+                                </motion.button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
