@@ -4,6 +4,7 @@ import {categories, menu} from "./data/items.ts";
 import MenuItems from './components/MenuItems';
 import {useState, useRef} from "react";
 import type {menuRefs} from "./types/menuTypes.ts";
+import Cart from "./components/Cart.tsx";
 
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
               />
               <MenuItems menuItems={menu} itemRefs={itemRefs} />
           </div>
+          <Cart></Cart>
       </div>
   );
 }
