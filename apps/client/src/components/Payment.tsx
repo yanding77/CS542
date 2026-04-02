@@ -5,7 +5,7 @@ const Payment = ({ cartItems, onClearCart }) => {
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     useEffect(() => {
-        const totalAmount = cartItems.reduce((total, item) => total + item.price, 0);
+        const totalAmount = cartItems.reduce((total : number, item) => total + item.price, 0);
         setPaymentData({
             amount: totalAmount,
             items: cartItems

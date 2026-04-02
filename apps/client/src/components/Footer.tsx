@@ -36,7 +36,7 @@ const Footer = () => {
 
 const styles = {
     footer: {
-        textAlign: "center",
+        textAlign: "center" as const, // added to fix error where it wasn't accepting it
         padding: "6px",
         backgroundColor: "rgb(3, 31, 36)", // Dark greenish color
         borderRadius: "10px", // Optional: rounded corners

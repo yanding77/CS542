@@ -11,7 +11,7 @@ export default function LocationLogin() {
         e.preventDefault();
 
         // send login details to backend
-        const res = await fetch('http://localhost:3000/auth/login', {
+        const res = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: username, password: password, role: 'location' }),

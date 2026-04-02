@@ -8,7 +8,7 @@ export default function LocationDashboard() {
         const fetchDashboard = async () => {
             const token = localStorage.getItem('jwt');
 
-            const res = await fetch('http://localhost:3000/locations/dashboard', {
+            const res = await fetch('http://localhost:3000/api/locations/dashboard', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

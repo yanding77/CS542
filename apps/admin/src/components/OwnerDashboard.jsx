@@ -8,7 +8,7 @@ export default function OwnerDashboard() {
         const fetchDashboard = async () => {
             const token = localStorage.getItem('jwt');
 
-            const res = await fetch('http://localhost:3000/owners/dashboard', {
+            const res = await fetch('http://localhost:3000/api/owners/dashboard', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

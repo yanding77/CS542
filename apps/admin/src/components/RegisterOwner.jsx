@@ -18,7 +18,7 @@ export default function RegisterOwner() {
         }
 
         // need to send email, restaurant name, password, and confirmed password to create account
-        const res = await fetch('http://localhost:3000/owners/register', {
+        const res = await fetch('http://localhost:3000/api/owners/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password, restaurantName }),
