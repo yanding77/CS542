@@ -1,11 +1,11 @@
-export interface menuRefs  {
-    [key: string]: HTMLElement | null;
+export class AddItemDto {
+    readonly productId: string;
+    readonly clientId: string; // Who is adding this?
 }
 
-export interface menuCategoriesProps {
-    categories: string[];
-    selectedCategory: string;
-    onSelectCategory: (category: string) => void;
+export class DeleteItemDTO {
+    readonly productId: string;
+    readonly clientId: string;
 }
 
 export interface BaseMenuItem {
@@ -17,11 +17,6 @@ export interface BaseMenuItem {
 export interface MenuItem extends BaseMenuItem {
     category: string;
     image?: string;
-}
-
-export interface MenuItemsProps {
-    menuItems: MenuItem[];
-    itemRefs: React.MutableRefObject<Record<string, HTMLElement | null>>;
 }
 
 
