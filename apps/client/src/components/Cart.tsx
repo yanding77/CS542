@@ -87,7 +87,7 @@ export default function Cart() {
                                     <li className="flex justify-between items-center border-b border-gray-100 pb-3">
                                         <div className="flex flex-col">
                                             <span className="font-bold text-[#2a2a2a]">Ceviche de Camarón</span>
-                                            <span className="text-sm text-gray-500">x2 @ $15.00</span>
+                                            <span className="text-sm text-gray-500">x2 - $15.00</span>
                                         </div>
                                         <span className="font-extrabold text-lg tabular-nums">$30.00</span>
                                     </li>
@@ -95,7 +95,7 @@ export default function Cart() {
 
                                 {/* Total (Old Payment Styling) */}
                                 <div className="mt-8 pt-5 border-t-2 border-[#e4c9a6] flex justify-between items-center">
-                                    <span className="font-black text-xl uppercase tracking-tighter">Total a Pagar</span>
+                                    <span className="font-black text-xl uppercase tracking-tighter">Total a Pagar </span>
                                     <span className="text-3xl font-black text-[#2a2a2a] tabular-nums">$30.00</span>
                                 </div>
 
