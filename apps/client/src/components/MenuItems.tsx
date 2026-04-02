@@ -1,0 +1,62 @@
+import type {MenuItemsProps} from "../types/menuTypes.ts";
+
+export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
+    const getCategoryId = (category: string) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
+
+    const registerRef = (el: HTMLElement | null, category: string, isFirst: boolean) => {
+        if (isFirst && el) {
+            const catId = getCategoryId(category);
+            itemRefs.current[catId] = el;
+        }
+    };
+    return (
+        <main className="
+        bg-[#05161A] rounded-[10px]
+        h-[70vh] min-h-0
+        overflow-y-auto
+        border-[5px] border-[#f8f9f9]
+        ">
+        <ul className="list-none">
+            {menuItems.map((item, index) => {
+                const isFirst = index === 0 || menuItems[index - 1].category !== item.category;
+                return(
+                <li
+                    key={item.name}
+                    ref={(el) => registerRef(el, item.category, isFirst)}
+                    data-category={item.category}
+                    className="pb-5 border-b border-[#ddd] mb-5 px-4"
+                >
+                    <span className="font-extrabold text-[1.2rem] text-[#f5ebd5]">
+                        {item.name} - ${item.price.toFixed(2)}
+                    </span>
+
+                    {item.image && (
+                        <div className="my-4">
+                            <img
+                                src={`${item.image}`}
+                                alt={item.name}
+                                className="
+                                    w-full max-w-[700px]
+                                    rounded-[10px]
+                                    shadow-[0_4px_8px_rgba(0,0,0,0.1)]
+                                    object-cover
+                                    block mx-auto
+                                    border border-[#ddd]"
+                            />
+                        </div>
+                    )}
+
+                    <div className="flex justify-center items-center gap-[10px] mt-3">
+                        <button className="bg-[#f5ebd5] text-black px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer">
+                            +
+                        </button>
+                        <button className="bg-[#e74c3c] text-white px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer">
+                            -
+                        </button>
+                    </div>
+                </li>
+            )})}
+        </ul>
+            </main>
+    );
+}
