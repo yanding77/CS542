@@ -15,6 +15,9 @@ export default function Cart() {
                         drag // Enables dragging
                         dragConstraints={constraintsRef} // Keeps it on screen
                         dragMomentum={true}
+                        dragTransition={{
+                            power: 0.1
+                        }}
 
                         onDragStart={ () =>{
                             isDragged.current = true;
@@ -56,9 +59,7 @@ export default function Cart() {
                         onClick={() => setIsOpen(false)}
                         className="pointer-events-auto fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
                     >
-                        {/* 3. THE CART BOX (The "Fixed Screen") */}
                         <motion.div
-                            // Stop clicks inside the box from closing the overlay
                             onClick={(e) => e.stopPropagation()}
 
                             // "Pop-up" animation
@@ -81,7 +82,6 @@ export default function Cart() {
                                 <h3 className="font-serif italic font-bold text-[#2a2a2a] text-lg">Tu Pedido</h3>
                             </div>
 
-                            {/* Cart Content Area */}
                             <div className="p-8 max-h-[60vh] overflow-y-auto font-serif">
                                 <ul className="space-y-4">
                                     <li className="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -93,7 +93,6 @@ export default function Cart() {
                                     </li>
                                 </ul>
 
-                                {/* Total (Old Payment Styling) */}
                                 <div className="mt-8 pt-5 border-t-2 border-[#e4c9a6] flex justify-between items-center">
                                     <span className="font-black text-xl uppercase tracking-tighter">Total a Pagar </span>
                                     <span className="text-3xl font-black text-[#2a2a2a] tabular-nums">$30.00</span>
