@@ -9,10 +9,24 @@ export interface menuCategoriesProps {
 }
 
 export interface MenuItem {
+    id: string;
     name: string;
     category: string;
     price: number;
     image?: string;
+}
+
+export interface cartItem extends MenuItem {
+    quantity: number;
+    subtotal: number;
+    addedBy?: string;
+}
+
+export interface TableCart {
+    tableId: string;
+    items: cartItem[];
+    totalAmount: number;
+    itemCount: number;
 }
 
 export interface MenuItemsProps {
