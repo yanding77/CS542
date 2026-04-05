@@ -41,7 +41,7 @@ export const useCart = (tableID: string) => {
                 method: "DELETE",
                 body: JSON.stringify(dto),
                 headers: {
-                    'Content-Type': 'application/json', // 👈 REQUIRED
+                    'Content-Type': 'application/json',
                 },
             });
             if (!status.ok){
@@ -54,9 +54,16 @@ export const useCart = (tableID: string) => {
         }
     });
 
+    const quantityMap: { [key: string]: number } = {};
+
+    cartQuery.data?.items.forEach(item => {
+        quantityMap[item.id] = item.quantity;
+    });
+
 
     return {
         cart: cartQuery.data,
+        quantityMap: quantityMap,
         addItem: addToCart.mutate,
         deleteItem: removeFromCart.mutate,
     }

@@ -3,8 +3,9 @@ import {useCart} from "../hooks/CartHook.tsx";
 
 
 export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
-    const {cart, addItem, deleteItem} = useCart("mesa1");
+    const {quantityMap,addItem, deleteItem} = useCart("mesa1");
     const myGuestID = 'guest';
+
 
     const getCategoryId = (category: string) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
 
@@ -14,6 +15,7 @@ export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
             itemRefs.current[catId] = el;
         }
     };
+
     return (
         <main className="
         bg-[#05161A] rounded-[10px]
@@ -23,9 +25,6 @@ export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
         ">
         <ul className="list-none">
             {menuItems.map((item, index) => {
-                const cartItem = cart?.items.find(i => i.id === item.id);
-                const quantity = cartItem?.quantity || 0;
-
                 const isFirst = index === 0 || menuItems[index - 1].category !== item.category;
                 return(
                 <li
@@ -60,10 +59,10 @@ export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
                             +
                         </button>
 
-                        { quantity > 0 && (
+                        { quantityMap[item.id] > 0 && (
                             <>
                                 <span className="text-[#f5ebd5] font-black text-xl w-6 text-center">
-                                    {quantity}
+                                    {quantityMap[item.id]}
                                 </span>
                                 <button className="bg-[#e74c3c] text-white px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer"
                                     onClick={() => deleteItem({productId: item.id, clientId: myGuestID})}>

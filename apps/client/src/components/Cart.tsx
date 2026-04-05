@@ -88,8 +88,9 @@ export default function Cart() {
                                 </motion.button>
                                 <h3 className="font-serif italic font-bold text-[#2a2a2a] text-lg">Tu Pedido</h3>
                             </div>
-
                             <div className="p-8 max-h-[60vh] overflow-y-auto font-serif">
+                                {cart?.itemCount && cart.itemCount > 0 ? (
+                                    <>
                                 <ul className="space-y-4">
                                     <li className="flex justify-between items-center border-b border-gray-100 pb-3">
                                         <div className="flex flex-col">
@@ -102,7 +103,7 @@ export default function Cart() {
 
                                 <div className="mt-8 pt-5 border-t-2 border-[#e4c9a6] flex justify-between items-center">
                                     <span className="font-black text-xl uppercase tracking-tighter">Total a Pagar </span>
-                                    <span className="text-3xl font-black text-[#2a2a2a] tabular-nums">$30.00</span>
+                                    <span className="text-3xl font-black text-[#2a2a2a] tabular-nums">{`$ ${cart?.totalPrice}`}</span>
                                 </div>
 
                                 <motion.button
@@ -112,6 +113,9 @@ export default function Cart() {
                                 >
                                     Confirmar Pedido!
                                 </motion.button>
+                                    </> ):
+                                    <span className="font-black text-xl uppercase tracking-tighter">Esta vacia tu hvd!</span>
+                                }
                             </div>
                         </motion.div>
                     </motion.div>

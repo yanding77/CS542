@@ -23,7 +23,7 @@ export class CartService {
             cart = {
                 tableId,
                 items: [],
-                totalAmount: 0,
+                totalPrice: 0,
                 itemCount: 0,
             };
             this.carts.set(tableId, cart);
@@ -82,7 +82,7 @@ export class CartService {
     }
 
     private recalculate(cart: TableCart): TableCart {
-        cart.totalAmount = Number(
+        cart.totalPrice = Number(
             cart.items.reduce((acc, item) => acc + item.subtotal, 0).toFixed(2),
         );
         cart.itemCount = cart.items.reduce((acc, item) => acc + item.quantity, 0);

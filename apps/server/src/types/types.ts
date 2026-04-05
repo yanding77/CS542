@@ -24,7 +24,7 @@ export interface CartItem extends BaseMenuItem {
 export interface TableCart {
     tableId: string;
     items: CartItem[];
-    totalAmount: number;
+    totalPrice: number;
     itemCount: number;
 }
 
