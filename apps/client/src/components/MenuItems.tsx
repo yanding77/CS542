@@ -23,6 +23,9 @@ export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
         ">
         <ul className="list-none">
             {menuItems.map((item, index) => {
+                const cartItem = cart?.items.find(i => i.id === item.id);
+                const quantity = cartItem?.quantity || 0;
+
                 const isFirst = index === 0 || menuItems[index - 1].category !== item.category;
                 return(
                 <li
@@ -56,11 +59,18 @@ export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
                                 onClick={() => addItem({productId: item.id, clientId: myGuestID})}>
                             +
                         </button>
-                        <button className="bg-[#e74c3c] text-white px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer"
-                                onClick={() => deleteItem({productId: item.id, clientId: myGuestID})}>
 
-                        -
-                        </button>
+                        { quantity > 0 && (
+                            <>
+                                <span className="text-[#f5ebd5] font-black text-xl w-6 text-center">
+                                    {quantity}
+                                </span>
+                                <button className="bg-[#e74c3c] text-white px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer"
+                                    onClick={() => deleteItem({productId: item.id, clientId: myGuestID})}>
+                                -
+                                </button>
+                        </>
+                        )}
                     </div>
                 </li>
             )})}
