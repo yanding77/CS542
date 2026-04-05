@@ -1,6 +1,6 @@
 export class ItemDTO {
     readonly productId: string;
-    readonly clientId: string; // Who is adding this?
+    readonly clientId: string;
 }
 
 export interface BaseMenuItem {

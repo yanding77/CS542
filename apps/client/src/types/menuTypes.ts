@@ -1,3 +1,8 @@
+export interface ItemDTO {
+     productId: string;
+     clientId: string;
+}
+
 export interface menuRefs  {
     [key: string]: HTMLElement | null;
 }
@@ -37,4 +42,5 @@ export interface TableCart {
     totalAmount: number;
     itemCount: number;
 }
+
 

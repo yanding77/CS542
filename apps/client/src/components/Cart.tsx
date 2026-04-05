@@ -8,7 +8,8 @@ export default function Cart() {
     const isDragged = useRef(false);
     const constraintsRef = useRef(null);
 
-    const cartData = useCart("mesa1");
+    const {cart} = useCart("mesa1");
+
 
 
     return (
@@ -43,9 +44,9 @@ export default function Cart() {
                     >
                         <div className="relative bg-[#ffcc00] p-5 rounded-full shadow-2xl border-4 border-white">
                             <span className="text-3xl">🛒</span> {/* Placeholder */}
-                            {cartData.cart?.itemCount && cartData.cart.itemCount > 0 ? (
+                            {cart?.itemCount && cart.itemCount > 0 ? (
                             <div className="absolute -top-2 -right-2 bg-[#e74c3c] text-white text-xs font-black w-7 h-7 rounded-full flex items-center justify-center border-2 border-white tabular-nums">
-                                {cartData.cart.itemCount}
+                                {cart.itemCount}
                             </div>
                                 ): null}
 
