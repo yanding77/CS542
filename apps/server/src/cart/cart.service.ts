@@ -1,5 +1,5 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
-import {AddItemDto, BaseMenuItem, TableCart} from "../types/types";
+import {BaseMenuItem, ItemDTO, TableCart} from "../types/types";
 import {CompleteMenuItems} from "../data/menu";
 
 @Injectable()
@@ -31,7 +31,7 @@ export class CartService {
         return cart;
     }
 
-    addItem(tableId: string, dto: AddItemDto): TableCart {
+    addItem(tableId: string, dto: ItemDTO): TableCart {
         const cart = this.getCart(tableId);
         const menuItem = this.menuItems.get(dto.productId);
 
@@ -57,13 +57,16 @@ export class CartService {
 
         return this.recalculate(cart);
     }
-    removeItem(tableId: string, productId: string, clientId: string): TableCart {
+    removeItem(tableId: string, dto: ItemDTO): TableCart {
         const cart = this.getCart(tableId);
+        const menuItem = this.menuItems.get(dto.productId);
+        if (!menuItem) throw new NotFoundException('Product not found in menu');
+
         const itemIndex = cart.items.findIndex(
-            (i) => i.id === productId && i.addedBy === clientId,
+            (i) => i.id === dto.productId && i.addedBy === dto.clientId,
         );
 
-        if (itemIndex === -1) return cart;
+        if (itemIndex === -1) throw new NotFoundException('Product not found in cart');
 
         const item = cart.items[itemIndex];
 

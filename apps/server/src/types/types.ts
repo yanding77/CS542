@@ -1,11 +1,6 @@
-export class AddItemDto {
+export class ItemDTO {
     readonly productId: string;
     readonly clientId: string; // Who is adding this?
-}
-
-export class DeleteItemDTO {
-    readonly productId: string;
-    readonly clientId: string;
 }
 
 export interface BaseMenuItem {
