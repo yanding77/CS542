@@ -8,8 +8,8 @@ export default function Cart() {
     const isDragged = useRef(false);
     const constraintsRef = useRef(null);
 
-    const {cart} = useCart("mesa1");
-
+    const {cart, addItem, deleteItem} = useCart("mesa1");
+    const myGuestID = 'guest';
 
 
     return (
@@ -55,7 +55,7 @@ export default function Cart() {
                 )}
             </AnimatePresence>
 
-            {/* 2. THE FIXED OVERLAY SCREEN */}
+
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -68,14 +68,7 @@ export default function Cart() {
                     >
                         <motion.div
                             onClick={(e) => e.stopPropagation()}
-
-                            // "Pop-up" animation
-                            initial={{ y: 50, scale: 0.9, opacity: 0 }}
-                            animate={{ y: 0, scale: 1, opacity: 1 }}
-                            exit={{ y: 50, scale: 0.9, opacity: 0 }}
-                            transition={{ type: "spring", damping: 20, stiffness: 300 }}
-
-                            className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-[#e4c9a6]"
+                            className="flex flex-col max-h-[85vh] bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-[#e4c9a6]"
                         >
                             <div className="p-5 bg-[#f5ebd5] flex justify-between items-center border-b border-[#e4c9a6]">
                                 <motion.button
@@ -84,23 +77,48 @@ export default function Cart() {
                                     onClick={() => setIsOpen(false)}
                                     className="bg-[#2a2a2a] text-white px-5 py-2 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-red-600 transition-colors"
                                 >
-                                    ← Regresar
+                                    ← Menu
                                 </motion.button>
                                 <h3 className="font-serif italic font-bold text-[#2a2a2a] text-lg">Tu Pedido</h3>
                             </div>
-                            <div className="p-8 max-h-[60vh] overflow-y-auto font-serif">
+                            <div className="flex-1 p-6 flex flex-col min-h-0">
                                 {cart?.itemCount && cart.itemCount > 0 ? (
                                     <>
-                                <ul className="space-y-4">
-                                    <li className="flex justify-between items-center border-b border-gray-100 pb-3">
-                                        <div className="flex flex-col">
-                                            <span className="font-bold text-[#2a2a2a]">Ceviche de Camarón</span>
-                                            <span className="text-sm text-gray-500">x2 - $15.00</span>
-                                        </div>
-                                        <span className="font-extrabold text-lg tabular-nums">$30.00</span>
-                                    </li>
-                                </ul>
+                                <ul className="flex-1 overflow-y-auto custom-scrollbar space-y-2">
+                                    {cart.items.map((item) => (
+                                        <motion.li
+                                            key={item.id}
+                                            className="flex justify-between items-center bg-gray-50/50 p-3 rounded-2xl border border-transparent hover:border-[#ffcc00] transition-colors"
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 20 }}
+                                        >
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-[#2a2a2a] leading-tight">{item.name}</span>
+                                                <div className="flex items-center gap-1">
+                                                    <button
+                                                        onClick={() => addItem({productId: item.id, clientId: myGuestID})}
+                                                        className="w-6 h-6 flex items-center justify-center hover:bg-green-50 rounded-md transition-colors font-bold"
+                                                    >
+                                                        ＋
+                                                    </button>
+                                                <span className="leading-6 text-xs text-gray-400 font-mono uppercase">{item.quantity}</span>
+                                                    <button
+                                                        onClick={() => deleteItem({productId: item.id, clientId: myGuestID})}
+                                                        className="w-6 h-6 flex items-center justify-center hover:bg-red-50 rounded-md transition-colors font-bold"
+                                                    >
+                                                        －
+                                                    </button>
+                                                    <span className="leading-6 text-xs text-gray-400 font-mono uppercase ml-4">${item.price}</span>
 
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <span className="font-black text-[#2a2a2a] tabular-nums">${(item.price * item.quantity).toFixed(2)}</span>
+                                            </div>
+                                        </motion.li>
+                                    ))}
+                                </ul>
                                 <div className="mt-8 pt-5 border-t-2 border-[#e4c9a6] flex justify-between items-center">
                                     <span className="font-black text-xl uppercase tracking-tighter">Total a Pagar </span>
                                     <span className="text-3xl font-black text-[#2a2a2a] tabular-nums">{`$ ${cart?.totalPrice}`}</span>

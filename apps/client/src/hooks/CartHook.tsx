@@ -26,13 +26,13 @@ export const useCart = (tableID: string) => {
                 },
             });
             if (!status.ok){
-                throw new Error('Error: Failed to add to cart');
+                throw new Error("Network Error: Failed to add to cart");
             }
             return status.json();
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['cart', tableID]});
-        }
+        },
     });
 
     const removeFromCart = useMutation({
@@ -45,7 +45,7 @@ export const useCart = (tableID: string) => {
                 },
             });
             if (!status.ok){
-                throw new Error('Error: Failed to delete from cart');
+                throw new Error('Network Error: Failed to delete from cart');
             }
             return status.json();
         },
