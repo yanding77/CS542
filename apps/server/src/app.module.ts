@@ -11,5 +11,5 @@ import { CartModule } from './cart/cart.module';
     imports: [DatabaseModule, AuthModule, OwnersModule, LocationsModule, CartModule],
     controllers: [AppController],
     providers: [AppService],
-)
+})
 export class AppModule {}
