@@ -4,7 +4,6 @@ export default function OwnerDashboard() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        // redirects to the /locations/dashboard directory if login credentials are correct
         const fetchDashboard = async () => {
             const token = localStorage.getItem('jwt');
 
@@ -14,33 +13,64 @@ export default function OwnerDashboard() {
                 },
             });
 
-            // If credentials are invalid, give an error
             if (!res.ok) {
                 console.error('Unauthorized');
                 return;
             }
 
-            // if successful, set data to their data for their dashboard
             const data = await res.json();
             setData(data);
         };
 
-
         void fetchDashboard();
     }, []);
 
-    // logs out account back to /login
     const handleLogout = () => {
-        // Remove JWT token
         localStorage.removeItem('jwt');
         window.location.href = '/';
     };
 
+    const goToLocation = (locationId) => {
+        window.location.href = `/owner/location/${locationId}`;
+    };
+
+    const createLocation = () => {
+        window.location.href = `/owner/create-location`;
+    };
+
+    if (!data) return <div>Loading...</div>;
+
     return (
-        <div>
-            <h2>Owner Dashboard</h2>
+        <div style={{ padding: '20px' }}>
+            {/* Welcome Message */}
+            <h2>Welcome, {data.owner?.email}</h2>
+
+            {/* Logout */}
             <button onClick={handleLogout}>Logout</button>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+
+            <hr />
+
+            {/* Locations List */}
+            <h3>Your Locations</h3>
+
+            {data.locations && data.locations.length > 0 ? (
+                data.locations.map((loc) => (
+                    <div key={loc.id} style={{ marginBottom: '10px' }}>
+                        <button onClick={() => goToLocation(loc.id)}>
+                            {loc.address || loc.username}
+                        </button>
+                    </div>
+                ))
+            ) : (
+                <p>No locations yet.</p>
+            )}
+
+            <hr />
+
+            {/* Create New Location */}
+            <button onClick={createLocation}>
+                + Create New Location
+            </button>
         </div>
     );
 }

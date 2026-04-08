@@ -6,6 +6,7 @@ import RegisterOwner from "./components/RegisterOwner.jsx";
 import OwnerDashboard from './components/OwnerDashboard.jsx';
 import LocationDashboard from './components/LocationDashboard';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import CreateLocationForm from "./components/CreateLocationForm.jsx";
 
 function App() {
     return (
@@ -19,6 +20,14 @@ function App() {
                 element={
                     <ProtectedRoute allowedRole="owner">
                         <OwnerDashboard />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/create-location"
+                element={
+                    <ProtectedRoute allowedRole="owner">
+                        <CreateLocationForm />
                     </ProtectedRoute>
                 }
             />
