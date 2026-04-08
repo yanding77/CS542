@@ -1,3 +1,8 @@
+export interface ItemDTO {
+     productId: string;
+     clientId: string;
+}
+
 export interface menuRefs  {
     [key: string]: HTMLElement | null;
 }
@@ -8,10 +13,14 @@ export interface menuCategoriesProps {
     onSelectCategory: (category: string) => void;
 }
 
-export interface MenuItem {
+export interface BaseMenuItem {
+    id: string;
     name: string;
-    category: string;
     price: number;
+}
+
+export interface MenuItem extends BaseMenuItem {
+    category: string;
     image?: string;
 }
 
@@ -19,3 +28,19 @@ export interface MenuItemsProps {
     menuItems: MenuItem[];
     itemRefs: React.MutableRefObject<Record<string, HTMLElement | null>>;
 }
+
+
+export interface CartItem extends BaseMenuItem {
+    quantity: number;
+    subtotal: number;
+    addedBy: string;
+}
+
+export interface TableCart {
+    tableId: string;
+    items: CartItem[];
+    totalPrice: number;
+    itemCount: number;
+}
+
+

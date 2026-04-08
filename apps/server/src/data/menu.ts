@@ -3,7 +3,7 @@ export const categories = [
     "Menu Ninos", "Adicionales", "Desayuno y Tarde", "Piqueos", "Postres", "Bebidas Calientes", "Gaseosas", "Tragos", "Cervezas",
 ];
 
-export const menu = [
+export const CompleteMenuItems = [
     // Entradas
     { id: "ent-1", name: "Ensalada Cesar de Pollo", category: "Entradas", price: 9.80, image: "/pics/14.jpeg"},
     { id: "ent-2", name: "Ensalada Fria", category: "Entradas", price: 6.20, image: "/pics/15.jpeg" },

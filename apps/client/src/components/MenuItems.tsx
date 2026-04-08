@@ -1,6 +1,12 @@
 import type {MenuItemsProps} from "../types/menuTypes.ts";
+import {useCart} from "../hooks/CartHook.tsx";
+
 
 export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
+    const {quantityMap,addItem, deleteItem} = useCart("mesa1");
+    const myGuestID = 'guest';
+
+
     const getCategoryId = (category: string) => `cat-${category.toLowerCase().replace(/\s+/g, '-')}`;
 
     const registerRef = (el: HTMLElement | null, category: string, isFirst: boolean) => {
@@ -9,6 +15,7 @@ export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
             itemRefs.current[catId] = el;
         }
     };
+
     return (
         <main className="
         bg-[#05161A] rounded-[10px]
@@ -47,12 +54,22 @@ export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
                     )}
 
                     <div className="flex justify-center items-center gap-[10px] mt-3">
-                        <button className="bg-[#f5ebd5] text-black px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer">
+                        <button className="bg-[#f5ebd5] text-black px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer"
+                                onClick={() => addItem({productId: item.id, clientId: myGuestID})}>
                             +
                         </button>
-                        <button className="bg-[#e74c3c] text-white px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer">
-                            -
-                        </button>
+
+                        { quantityMap[item.id] > 0 && (
+                            <>
+                                <span className="text-[#f5ebd5] font-black text-xl w-6 text-center">
+                                    {quantityMap[item.id]}
+                                </span>
+                                <button className="bg-[#e74c3c] text-white px-4 py-1 rounded-[8px] font-bold text-[1.2rem] cursor-pointer"
+                                    onClick={() => deleteItem({productId: item.id, clientId: myGuestID})}>
+                                -
+                                </button>
+                        </>
+                        )}
                     </div>
                 </li>
             )})}
