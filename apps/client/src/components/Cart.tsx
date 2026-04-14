@@ -92,9 +92,6 @@ export default function Cart() {
                                                 <motion.li
                                                     key={item.id}
                                                     className="flex justify-between items-center bg-gray-50/50 p-3 rounded-2xl border border-transparent hover:border-[#ffcc00] transition-colors"
-                                                    initial={{ opacity: 0, x: -10 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    exit={{ opacity: 0, x: 20 }}
                                                 >
                                                     <div className="flex flex-col">
                                                         <span className="font-bold text-[#2a2a2a] leading-tight">{item.name}</span>
