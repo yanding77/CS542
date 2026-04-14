@@ -14,6 +14,8 @@ export const useCart = (tableID: string) => {
             }
             return status.json();
         },
+        refetchInterval: 1000,
+        refetchIntervalInBackground: true,
     })
 
     const addToCart = useMutation({

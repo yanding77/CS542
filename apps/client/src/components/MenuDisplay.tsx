@@ -1,7 +1,7 @@
-import {useRef, useState} from "react";
-import type {menuRefs} from "../types/menuTypes.ts";
+import { useRef, useState } from "react";
+import type { menuRefs } from "../types/menuTypes.ts";
 import MenuCategories from "./MenuCategories.tsx";
-import {categories, menu} from "../data/items.ts";
+import { categories, menu } from "../data/items.ts";
 import MenuItems from "./MenuItems.tsx";
 
 export default function MenuDisplay() {
@@ -24,7 +24,7 @@ export default function MenuDisplay() {
     };
 
     return (
-        <div className="grid grid-cols-[40%_1fr] md:grid-cols-[30%_1fr] items-start">
+        <div className="h-[calc(100dvh-10rem)] grid grid-cols-[35%_1fr] sm:grid-cols-[30%_1fr]">
             <MenuCategories
                 categories={categories}
                 selectedCategory={selectedCategory}
