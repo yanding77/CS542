@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import './index.css'
 import App from './App.tsx'
-import { SessionProvider } from './hooks/GuestIDContext.tsx';
 import { BrowserRouter } from 'react-router-dom';
 
 const queryClient = new QueryClient();

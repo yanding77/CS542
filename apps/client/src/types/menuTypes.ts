@@ -1,9 +1,9 @@
 export interface ItemDTO {
-     productId: string;
-     clientId: string;
+    productId: string;
+    clientId: string;
 }
 
-export interface menuRefs  {
+export interface menuRefs {
     [key: string]: HTMLElement | null;
 }
 
@@ -44,3 +44,7 @@ export interface TableCart {
 }
 
 
+export interface SessionContextType {
+    guestId: string;
+    tableId: string;
+}

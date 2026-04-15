@@ -1,28 +1,18 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
 import type { SessionContextType } from "../types/menuTypes";
+import { v4 } from "uuid";
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
-
-// crypto.randomUUID() requires HTTPS. Phones on local network use HTTP, so we need a fallback.
-function generateUUID(): string {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-        return crypto.randomUUID();
-    }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-        const r = (Math.random() * 16) | 0;
-        const v = c === 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-    });
-}
 
 export function SessionProvider({ children }: { children: ReactNode }) {
     const { tableId } = useParams<{ tableId: string }>();
 
+    // Generate a guest ID once and persist it across page refreshes
     const [guestId] = useState(() => {
         const stored = localStorage.getItem("guestId");
         if (stored) return stored;
-        const fresh = generateUUID();
+        const fresh = v4();
         localStorage.setItem("guestId", fresh);
         return fresh;
     });
