@@ -34,7 +34,7 @@ export default function Footer() {
     const { guestId, tableId } = useSession();
 
     return (
-        <footer className="bg-[#05161A] border-[#e4c9a6] py-2 border-[5px] rounded-[5px]">
+        <footer className="shrink-0 bg-[#05161A] border-[#e4c9a6] py-2 border-[5px] rounded-[5px]">
             <nav className="flex justify-center gap-8" aria-label="Social links">
                 {SOCIALS.map((s) => (
                     <a key={s.name} href={s.href}

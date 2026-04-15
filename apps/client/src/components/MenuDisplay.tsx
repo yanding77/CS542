@@ -24,7 +24,7 @@ export default function MenuDisplay() {
     };
 
     return (
-        <div className="h-[calc(100dvh-8rem)] grid grid-cols-[35%_1fr] sm:grid-cols-[30%_1fr]">
+        <div className="flex-1 min-h-0 grid grid-cols-[35%_1fr] sm:grid-cols-[30%_1fr]">
             <MenuCategories
                 categories={categories}
                 selectedCategory={selectedCategory}

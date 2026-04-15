@@ -10,7 +10,7 @@ export default function App() {
     <Routes>
       <Route path="/:tableId" element={
         <SessionProvider>
-          <div className="font-serif bg-[#f8f9f9] text-[#2a2a2a] min-h-dvh flex flex-col">
+          <div className="font-serif bg-[#f8f9f9] text-[#2a2a2a] h-[100dvh] overflow-hidden flex flex-col">
             <Header />
             <MenuDisplay />
             <Cart />
