@@ -1,11 +1,21 @@
-import {Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn, ManyToOne, OneToMany} from 'typeorm';
+import {
+    Entity,
+    PrimaryColumn,
+    Column,
+    OneToOne,
+    JoinColumn,
+    CreateDateColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import {Location} from "./location.entity";
 import {DealItem} from "./deal_item.entity";
 import {DealCombo} from "./deal_combo.entity";
 
 @Entity('deals')
 export class Deal {
-    @PrimaryColumn('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @ManyToOne(() => Location, (location) => location.menus, { onDelete: 'CASCADE' })

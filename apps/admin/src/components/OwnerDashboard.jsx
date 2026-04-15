@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function OwnerDashboard() {
     const [data, setData] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDashboard = async () => {
@@ -27,15 +29,15 @@ export default function OwnerDashboard() {
 
     const handleLogout = () => {
         localStorage.removeItem('jwt');
-        window.location.href = '/';
+        navigate('/');
     };
 
     const goToLocation = (locationId) => {
-        window.location.href = `/owner/location/${locationId}`;
+        navigate(`/owner/location/${locationId}`);
     };
 
     const createLocation = () => {
-        window.location.href = `/owner/create-location`;
+        navigate(`/owner/create-location`);
     };
 
     if (!data) return <div>Loading...</div>;
@@ -57,7 +59,7 @@ export default function OwnerDashboard() {
                 data.locations.map((loc) => (
                     <div key={loc.id} style={{ marginBottom: '10px' }}>
                         <button onClick={() => goToLocation(loc.id)}>
-                            {loc.address || loc.username}
+                            {loc.username + ' at ' + loc.address}
                         </button>
                     </div>
                 ))

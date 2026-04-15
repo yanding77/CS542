@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Request, UseGuards, ForbiddenException } from '@nestjs/common';
+import {Controller, Post, Body, Get, Request, UseGuards, ForbiddenException, Req} from '@nestjs/common';
 import { LocationsService } from './locations.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -8,11 +8,12 @@ export class LocationsController {
 
     // route is /locations/register
     @Post('register')
-    async register(@Body() body: { username: string; password: string; ownerId: string; address: string }) {
-        const { username, password, ownerId, address } = body;
+    @UseGuards(AuthGuard('jwt'))
+    async register(@Req() req, @Body() body) {
+        const ownerId = req.user.sub;
 
         // call service to create location
-        await this.locationsService.createLocation(username, password, ownerId, address);
+        await this.locationsService.createLocation(body.username, body.password, ownerId, body.address);
 
         return { message: 'Location registered successfully' };
     }

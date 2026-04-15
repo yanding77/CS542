@@ -1,4 +1,14 @@
-import {Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn, ManyToOne, OneToMany} from 'typeorm';
+import {
+    Entity,
+    PrimaryColumn,
+    Column,
+    OneToOne,
+    JoinColumn,
+    CreateDateColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import {Location} from "./location.entity";
 import {ComboItem} from "./combo_item.entity";
 import {MenuCombo} from "./menu_combo.entity";
@@ -7,7 +17,7 @@ import {DealCombo} from "./deal_combo.entity";
 // combos(id, location (FK), name, comboItems (FK), menuCombos (FK), price, dealCombos (FK), created_at)
 @Entity('combos')
 export class Combo {
-    @PrimaryColumn('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @ManyToOne(() => Location, (location) => location.menus, { onDelete: 'CASCADE' })

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function CreateLocationForm() {
+export default function CreateLocationPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');
@@ -11,12 +11,19 @@ export default function CreateLocationForm() {
     const handleCreation = async (e) => {
         e.preventDefault();
 
-        // send login details to backend
+        const token = localStorage.getItem('jwt');
+
         const res = await fetch('http://localhost:3000/api/locations/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: username.toLowerCase(), password: password, address: address }),
-            // Need to add owner data to this
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                username: username.toLowerCase(),
+                password,
+                address,
+            }),
         });
 
         const data = await res.json();
@@ -27,6 +34,7 @@ export default function CreateLocationForm() {
             return;
         }
 
+        alert('Location account created!');
         // go to owner dashboard if account is created
         navigate('/owner/dashboard');
     };

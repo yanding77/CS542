@@ -1,4 +1,4 @@
-import {Entity, ManyToOne, PrimaryColumn, JoinColumn} from 'typeorm';
+import {Entity, ManyToOne, PrimaryColumn, JoinColumn, PrimaryGeneratedColumn} from 'typeorm';
 import {Item} from "./item.entity";
 import {Combo} from "./combo.entity";
 

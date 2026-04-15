@@ -24,7 +24,7 @@ export class OwnersController {
             throw new ForbiddenException('Access denied');
         }
 
-        // TODO: delete when done testing
-        return { message: `Welcome Owner ${req.user.sub}!` };
+        const ownerId = req.user.sub;
+        return this.ownersService.getDashboard(ownerId);
     }
 }
