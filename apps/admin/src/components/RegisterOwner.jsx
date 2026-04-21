@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthLayout from "./AuthLayout.jsx";
 
 // function to create a new owner
 export default function RegisterOwner() {
@@ -38,42 +39,60 @@ export default function RegisterOwner() {
     };
 
     return (
-        <div>
-            <h2>Create Owner Account</h2>
+        <div className="bg-neutral-800">
+            <AuthLayout
+                title="Create Owner Account"
+                subtitle="Enter new account information below to create a new account"
+            >
+                <form onSubmit={handleRegister} className="flex flex-col gap-3">
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
 
-            <form onSubmit={handleRegister}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="text"
+                        placeholder="Restaurant Name"
+                        value={restaurantName}
+                        onChange={(e) => setRestaurantName(e.target.value)}
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Restaurant Name"
-                    value={restaurantName}
-                    onChange={(e) => setRestaurantName(e.target.value)}
-                />
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="password"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
 
-                <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+                    <button
+                        type="submit"
+                        className="bg-black text-white py-3 rounded-lg hover:bg-gray-800"
+                    >
+                        Create Account
+                    </button>
 
-                <button type="submit">Create Account</button>
-            </form>
-
-            <button onClick={() => navigate('/')}>Back</button>
+                    <button
+                        type="button"
+                        onClick={() => navigate('/')}
+                        className="text-sm text-gray-500 hover:underline"
+                    >
+                        Back
+                    </button>
+                </form>
+            </AuthLayout>
         </div>
     );
 }

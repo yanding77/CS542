@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const CATEGORY_ORDER = [
     'alcohol',
@@ -51,242 +51,239 @@ export default function LocationDashboard() {
         if (!data?.items) return {};
 
         const groups = {};
-
         for (const item of data.items) {
             const cat = item.category || 'uncategorized';
-
             if (!groups[cat]) groups[cat] = [];
             groups[cat].push(item);
         }
-
         return groups;
     }, [data]);
 
     const toggleMenu = (id) => {
-        setOpenMenus((prev) => ({
-            ...prev,
-            [id]: !prev[id],
-        }));
+        setOpenMenus((prev) => ({ ...prev, [id]: !prev[id] }));
     };
 
     const toggleCategory = (cat) => {
-        setOpenCategories((prev) => ({
-            ...prev,
-            [cat]: !prev[cat],
-        }));
+        setOpenCategories((prev) => ({ ...prev, [cat]: !prev[cat] }));
     };
 
     const toggleCombosSection = () => {
         setCombosOpen((prev) => !prev);
-        console.log(data.combos);
     };
 
-    if (!data) return <div>Loading...</div>;
+    if (!data) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <p className="text-gray-500">Loading dashboard...</p>
+            </div>
+        );
+    }
 
     return (
-        <div>
-            <h2>Location Dashboard</h2>
+        <div className="min-h-screen bg-neutral-800 flex flex-col">
 
-            {/* Logout / go back to Owner Dashboard */}
-            {role === 'location' && (
-                <button onClick={handleLogout}>Logout</button>
-            )}
+            {/* ================= HEADER ================= */}
+            <header className="bg-white border-b shadow-sm">
+                <div className="max-w-[1440px] mx-auto px-6 py-4 flex justify-between items-center">
+                    <div className="text-xl font-bold">Location Dashboard</div>
 
-            {role === 'owner' && (
-                <button onClick={handleBackToOwner}>
-                    Back to Location Management
-                </button>
-            )}
-
-            {/* ================= MENUS ================= */}
-            <section>
-                <h3>Menus</h3>
-
-                {data.menus.map((menu) => {
-                    const isOpen = openMenus[menu.id] ?? false;
-
-                    return (
-                        <div key={menu.id} style={{ marginBottom: 12 }}>
-                            <div
-                                onClick={() => toggleMenu(menu.id)}
-                                style={{
-                                    cursor: 'pointer',
-                                    fontWeight: 'bold',
-                                    padding: 10,
-                                    background: '#333',
-                                    borderRadius: 6,
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                }}
+                    <div className="flex gap-3">
+                        {role === 'owner' && (
+                            <button
+                                onClick={handleBackToOwner}
+                                className="px-4 py-2 rounded-lg border hover:bg-gray-100 transition"
                             >
-                                <span>{menu.name || 'Unnamed Menu'}</span>
-                                <span>{isOpen ? '▲' : '▼'}</span>
-                            </div>
-
-                            {isOpen && (
-                                <div style={{ padding: 10 }}>
-                                    {/* MENU ITEMS */}
-                                    {menu.menuItems?.length > 0 && (
-                                        <>
-                                            <h4>Items</h4>
-                                            {menu.menuItems.map((mi) => (
-                                                <div key={mi.id}>
-                                                    {mi.item?.name}
-                                                </div>
-                                            ))}
-                                        </>
-                                    )}
-
-                                    {/* MENU COMBOS */}
-                                    {menu.menuCombos?.length > 0 && (
-                                        <>
-                                            <h4>Combos</h4>
-                                            {menu.menuCombos.map((mc) => (
-                                                <div key={mc.id}>
-                                                    {mc.combo?.name}
-                                                </div>
-                                            ))}
-                                        </>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    );
-                })}
-            </section>
-
-            {/* ================= ITEMS BY CATEGORY ================= */}
-            <section>
-                <h3>Items</h3>
-
-                {CATEGORY_ORDER.map((cat) => {
-                    const items = groupedItems[cat] || [];
-                    const isOpen = openCategories[cat] ?? false;
-
-                    return (
-                        <div key={cat} style={{ marginBottom: 12 }}>
-                            <div
-                                onClick={() => toggleCategory(cat)}
-                                style={{
-                                    cursor: 'pointer',
-                                    fontWeight: 'bold',
-                                    padding: 10,
-                                    background: '#444',
-                                    borderRadius: 6,
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <span>{cat.toUpperCase()}</span>
-                                <span>{isOpen ? '▲' : '▼'}</span>
-                            </div>
-
-                            {isOpen && (
-                                <table
-                                    style={{
-                                        width: '100%',
-                                        marginTop: 8,
-                                        borderCollapse: 'collapse',
-                                    }}
-                                >
-                                    <thead>
-                                    <tr>
-                                        <th align="left">Name</th>
-                                        <th align="left">Price</th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    {items.map((item) => (
-                                        <tr key={item.id}>
-                                            <td>{item.name}</td>
-                                            <td>${item.price}</td>
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
-                            )}
-                        </div>
-                    );
-                })}
-            </section>
-
-            {/* ================= COMBOS ================= */}
-            <section>
-                <div
-                    onClick={toggleCombosSection}
-                    style={{
-                        cursor: 'pointer',
-                        fontWeight: 'bold',
-                        padding: 10,
-                        background: '#333',
-                        borderRadius: 6,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginBottom: 10,
-                    }}
-                >
-                    <h3 style={{ margin: 0 }}>Combos</h3>
-                    <span>{combosOpen ? '▲' : '▼'}</span>
-                </div>
-
-                {combosOpen && (
-                    <div>
-                        {data.combos.map((combo) => (
-                            <div
-                                key={combo.id}
-                                style={{
-                                    padding: 10,
-                                    marginBottom: 10,
-                                    border: '1px solid #333',
-                                    borderRadius: 6,
-                                }}
-                            >
-                                <strong>
-                                    {combo.name} - ${combo.price}
-                                </strong>
-
-                                {combo.comboItems?.length > 0 && (
-                                    <ul>
-                                        {combo.comboItems.map((ci) => (
-                                            <li key={ci.id}>
-                                                {ci.item?.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            {/* ORDERS */}
-            <section>
-                <h3>In Progress Orders</h3>
-                {data.orders.inProgress.map((order) => (
-                    <div key={order.id}>
-                        <div>Order: {order.id}</div>
+                                Back to Location Management
+                            </button>
+                        )}
 
                         <button
-                            onClick={() =>
-                                updateOrderStatus(order.id, 'completed')
-                            }
+                            onClick={handleLogout}
+                            className="px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition"
                         >
-                            Mark Completed
+                            Logout
                         </button>
                     </div>
-                ))}
-            </section>
+                </div>
+            </header>
 
-            <section>
-                <h3>Completed Orders</h3>
-                {data.orders.completed.map((order) => (
-                    <div key={order.id}>
-                        Order: {order.id}
-                    </div>
-                ))}
-            </section>
+            {/* ================= MAIN ================= */}
+            <main className="flex-grow p-6">
+                <div className="max-w-[1100px] mx-auto flex flex-col gap-6">
+
+                    {/* ================= MENUS ================= */}
+                    <section className="bg-white p-6 rounded-xl border shadow-sm">
+                        <h2 className="text-lg font-semibold mb-4">Menus</h2>
+
+                        <div className="flex flex-col gap-3">
+                            {data.menus.map((menu) => {
+                                const isOpen = openMenus[menu.id] ?? false;
+
+                                return (
+                                    <div key={menu.id} className="border rounded-lg overflow-hidden">
+
+                                        <button
+                                            onClick={() => toggleMenu(menu.id)}
+                                            className="w-full flex justify-between items-center px-4 py-3 bg-gray-50 hover:bg-gray-100 transition"
+                                        >
+                                            <span className="font-medium">
+                                                {menu.name || 'Unnamed Menu'}
+                                            </span>
+                                            <span>{isOpen ? '▲' : '▼'}</span>
+                                        </button>
+
+                                        {isOpen && (
+                                            <div className="p-4 flex flex-col gap-4">
+
+                                                {/* Items */}
+                                                {menu.menuItems?.length > 0 && (
+                                                    <div>
+                                                        <h4 className="font-semibold mb-2">Items</h4>
+                                                        <div className="flex flex-col gap-1 text-sm text-gray-700">
+                                                            {menu.menuItems.map((mi) => (
+                                                                <div key={mi.id}>
+                                                                    {mi.item?.name}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Combos */}
+                                                {menu.menuCombos?.length > 0 && (
+                                                    <div>
+                                                        <h4 className="font-semibold mb-2">Combos</h4>
+                                                        <div className="flex flex-col gap-1 text-sm text-gray-700">
+                                                            {menu.menuCombos.map((mc) => (
+                                                                <div key={mc.id}>
+                                                                    {mc.combo?.name}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </section>
+
+                    {/* ================= ITEMS ================= */}
+                    <section className="bg-white p-6 rounded-xl border shadow-sm">
+                        <h2 className="text-lg font-semibold mb-4">Items</h2>
+
+                        <div className="flex flex-col gap-3">
+                            {CATEGORY_ORDER.map((cat) => {
+                                const items = groupedItems[cat] || [];
+                                const isOpen = openCategories[cat] ?? false;
+
+                                return (
+                                    <div key={cat} className="border rounded-lg overflow-hidden">
+
+                                        <button
+                                            onClick={() => toggleCategory(cat)}
+                                            className="w-full flex justify-between items-center px-4 py-3 bg-gray-50 hover:bg-gray-100 transition"
+                                        >
+                                            <span className="font-medium uppercase">
+                                                {cat}
+                                            </span>
+                                            <span>{isOpen ? '▲' : '▼'}</span>
+                                        </button>
+
+                                        {isOpen && (
+                                            <table className="w-full text-sm">
+                                                <thead className="text-left bg-gray-100">
+                                                <tr>
+                                                    <th className="p-2">Name</th>
+                                                    <th className="p-2">Price</th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                {items.map((item) => (
+                                                    <tr key={item.id} className="border-t">
+                                                        <td className="p-2">{item.name}</td>
+                                                        <td className="p-2">${item.price}</td>
+                                                    </tr>
+                                                ))}
+                                                </tbody>
+                                            </table>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </section>
+
+                    {/* ================= COMBOS ================= */}
+                    <section className="bg-white p-6 rounded-xl border shadow-sm">
+                        <button
+                            onClick={toggleCombosSection}
+                            className="w-full flex justify-between items-center mb-4"
+                        >
+                            <h2 className="text-lg font-semibold">Combos</h2>
+                            <span>{combosOpen ? '▲' : '▼'}</span>
+                        </button>
+
+                        {combosOpen && (
+                            <div className="flex flex-col gap-3">
+                                {data.combos.map((combo) => (
+                                    <div
+                                        key={combo.id}
+                                        className="border rounded-lg p-4"
+                                    >
+                                        <div className="font-semibold">
+                                            {combo.name} - ${combo.price}
+                                        </div>
+
+                                        {combo.comboItems?.length > 0 && (
+                                            <ul className="mt-2 text-sm text-gray-700 list-disc ml-5">
+                                                {combo.comboItems.map((ci) => (
+                                                    <li key={ci.id}>
+                                                        {ci.item?.name}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </section>
+
+                    {/* ================= ORDERS ================= */}
+                    <section className="bg-white p-6 rounded-xl border shadow-sm">
+                        <h2 className="text-lg font-semibold mb-3">In Progress Orders</h2>
+
+                        <div className="flex flex-col gap-2">
+                            {data.orders.inProgress.map((order) => (
+                                <div key={order.id} className="flex justify-between border p-3 rounded-lg">
+                                    <span>{order.id}</span>
+                                    <button className="text-sm text-green-600 hover:underline">
+                                        Mark Completed
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="bg-white p-6 rounded-xl border shadow-sm">
+                        <h2 className="text-lg font-semibold mb-3">Completed Orders</h2>
+
+                        <div className="flex flex-col gap-2 text-gray-600">
+                            {data.orders.completed.map((order) => (
+                                <div key={order.id} className="border p-3 rounded-lg">
+                                    {order.id}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                </div>
+            </main>
         </div>
     );
 }

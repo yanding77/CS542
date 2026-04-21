@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ComboForm from '../components/ComboForm';
 
 export default function ComboPage() {
@@ -25,7 +25,7 @@ export default function ComboPage() {
         fetchCombos();
     }, []);
 
-    const createCombo = async (formData, reset) => {
+    const createCombo = async (formData) => {
         const res = await fetch(
             'http://localhost:3000/api/combos/create',
             {
@@ -43,28 +43,67 @@ export default function ComboPage() {
             return;
         }
 
-        reset?.();
         fetchCombos();
     };
 
     return (
-        <div>
-            <h2>Combos</h2>
+        <div className="min-h-screen bg-neutral-800 flex items-center justify-center p-6">
+            <div className="w-full max-w-[900px] flex flex-col gap-6">
 
-            <ComboForm
-                locationId={locationId}
-                onSubmit={createCombo}
-            />
+                {/* HEADER CARD */}
+                <div className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex justify-between items-center">
+                    <div>
+                        <h2 className="text-xl font-semibold">Combos</h2>
+                        <p className="text-sm text-gray-500">
+                            Manage combo deals for this location
+                        </p>
+                    </div>
 
-            <h3>Existing Combos</h3>
-
-            {combos.map((combo) => (
-                <div key={combo.id}>
-                    {combo.name} - ${combo.price}
+                    <button
+                        onClick={() =>
+                            navigate(`/owner/location/${locationId}`)
+                        }
+                        className="px-4 py-2 border rounded-lg hover:bg-gray-100"
+                    >
+                        Back
+                    </button>
                 </div>
-            ))}
 
-            <button onClick={() => navigate(`/owner/location/${locationId}`)}>Back</button>
+                {/* FORM */}
+                <ComboForm
+                    locationId={locationId}
+                    onSubmit={createCombo}
+                />
+
+                {/* EXISTING COMBOS */}
+                <div className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex flex-col gap-3">
+                    <h3 className="text-lg font-semibold">
+                        Existing Combos
+                    </h3>
+
+                    {combos.length === 0 ? (
+                        <p className="text-sm text-gray-500">
+                            No combos created yet.
+                        </p>
+                    ) : (
+                        combos.map((combo) => (
+                            <div
+                                key={combo.id}
+                                className="border border-slate-200 rounded-lg p-4 flex justify-between"
+                            >
+                                <div>
+                                    <p className="font-medium">
+                                        {combo.name}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        ${combo.price}
+                                    </p>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

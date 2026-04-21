@@ -12,75 +12,54 @@ export default function ComboForm({ locationId, onSubmit }) {
 
     const token = localStorage.getItem('jwt');
 
-    // Fetch items for location
     useEffect(() => {
         const fetchItems = async () => {
-            try {
-                const res = await fetch(
-                    `http://localhost:3000/api/items/${locationId}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+            const res = await fetch(
+                `http://localhost:3000/api/items/${locationId}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
 
-                const data = await res.json();
-                setItems(Array.isArray(data) ? data : []);
-            } catch (err) {
-                console.error('Failed to fetch items', err);
-                setItems([]);
-            }
+            const data = await res.json();
+            setItems(Array.isArray(data) ? data : []);
         };
 
         fetchItems();
     }, [locationId, token]);
 
-    // Group items by category
     const groupedItems = useMemo(() => {
         const groups = {};
 
         for (const item of items) {
             const category = item.category || 'uncategorized';
-
-            if (!groups[category]) {
-                groups[category] = [];
-            }
-
+            if (!groups[category]) groups[category] = [];
             groups[category].push(item);
         }
 
         return groups;
     }, [items]);
 
-    // Toggle item selection
-    const toggleItem = (itemId) => {
+    const toggleItem = (id) => {
         setSelectedItems((prev) =>
-            prev.includes(itemId)
-                ? prev.filter((id) => id !== itemId)
-                : [...prev, itemId]
+            prev.includes(id)
+                ? prev.filter((x) => x !== id)
+                : [...prev, id]
         );
     };
 
-    // Toggle category collapse
-    const toggleCategory = (category) => {
+    const toggleCategory = (cat) => {
         setOpenCategories((prev) => ({
             ...prev,
-            [category]: !prev[category],
+            [cat]: !prev[cat],
         }));
     };
 
-    // Form input handler
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setFormData((p) => ({ ...p, [name]: value }));
     };
 
-    // Submit combo
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -91,90 +70,100 @@ export default function ComboForm({ locationId, onSubmit }) {
             locationId,
         });
 
-        setFormData({
-            name: '',
-            price: '',
-        });
-
+        setFormData({ name: '', price: '' });
         setSelectedItems([]);
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h3>Create Combo</h3>
+        <form
+            onSubmit={handleSubmit}
+            className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex flex-col gap-6"
+        >
+            {/* HEADER */}
+            <div className="text-center">
+                <h3 className="text-xl font-semibold">Create Combo</h3>
+                <p className="text-sm text-gray-500">
+                    Select items to include in this combo
+                </p>
+            </div>
 
-            {/* NAME */}
-            <input
-                name="name"
-                placeholder="Combo Name"
-                value={formData.name}
-                onChange={handleChange}
-            />
+            {/* INPUTS */}
+            <div className="flex flex-col gap-3">
+                <input
+                    name="name"
+                    placeholder="Combo Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="border border-slate-200 rounded-lg px-4 py-2"
+                />
 
-            {/* PRICE */}
-            <input
-                name="price"
-                type="number"
-                placeholder="Combo Price"
-                value={formData.price}
-                onChange={handleChange}
-            />
+                <input
+                    name="price"
+                    type="number"
+                    placeholder="Combo Price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    className="border border-slate-200 rounded-lg px-4 py-2"
+                />
+            </div>
 
-            <h4>Select Items</h4>
+            {/* ITEMS SECTION */}
+            <div className="flex flex-col gap-3">
+                <h4 className="font-semibold">Select Items</h4>
 
-            {/* GROUPED ITEMS */}
-            {Object.entries(groupedItems).map(([category, items]) => {
-                const isOpen = openCategories[category] ?? false;
+                {Object.entries(groupedItems).map(([category, items]) => {
+                    const isOpen = openCategories[category] ?? false;
 
-                return (
-                    <div key={category} style={{ marginBottom: '12px' }}>
-                        {/* Category Header */}
+                    return (
                         <div
-                            onClick={() => toggleCategory(category)}
-                            style={{
-                                cursor: 'pointer',
-                                fontWeight: 'bold',
-                                background: '#333333',
-                                padding: '8px',
-                                borderRadius: '6px',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                            }}
+                            key={category}
+                            className="border border-slate-200 rounded-lg overflow-hidden"
                         >
-                            <span>{category.toUpperCase()}</span>
-                            <span>{isOpen ? '▲' : '▼'}</span>
-                        </div>
-
-                        {/* Items List */}
-                        {isOpen && (
-                            <div style={{ padding: '8px 12px' }}>
-                                {items.map((item) => (
-                                    <label
-                                        key={item.id}
-                                        style={{
-                                            display: 'block',
-                                            marginBottom: '6px',
-                                        }}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedItems.includes(
-                                                item.id
-                                            )}
-                                            onChange={() =>
-                                                toggleItem(item.id)
-                                            }
-                                        />
-                                        {item.name} - ${item.price}
-                                    </label>
-                                ))}
+                            {/* CATEGORY HEADER */}
+                            <div
+                                onClick={() => toggleCategory(category)}
+                                className="cursor-pointer bg-slate-100 px-4 py-3 flex justify-between font-medium"
+                            >
+                                <span>{category.toUpperCase()}</span>
+                                <span>{isOpen ? '▲' : '▼'}</span>
                             </div>
-                        )}
-                    </div>
-                );
-            })}
 
-            <button type="submit">Create Combo</button>
+                            {/* ITEMS */}
+                            {isOpen && (
+                                <div className="p-4 flex flex-col gap-2">
+                                    {items.map((item) => (
+                                        <label
+                                            key={item.id}
+                                            className="flex items-center gap-2 text-sm"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedItems.includes(
+                                                    item.id
+                                                )}
+                                                onChange={() =>
+                                                    toggleItem(item.id)
+                                                }
+                                            />
+                                            <span>
+                                                {item.name} - ${item.price}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* SUBMIT */}
+            <button
+                type="submit"
+                className="bg-black text-white rounded-lg py-3 hover:bg-gray-800 transition"
+            >
+                Create Combo
+            </button>
         </form>
     );
 }

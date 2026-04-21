@@ -105,88 +105,140 @@ export default function DealForm({ onSubmit, locationId }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h3>Create Deal</h3>
+        <form
+            onSubmit={handleSubmit}
+            className="w-full bg-white border border-slate-200 rounded-xl shadow-sm p-6 flex flex-col gap-6"
+        >
+            {/* HEADER */}
+            <div>
+                <h3 className="text-xl font-semibold">Create Deal</h3>
+                <p className="text-sm text-slate-500">
+                    Create a promotional discount for an item or combo
+                </p>
+            </div>
 
+            {/* NAME */}
             <input
                 name="name"
                 placeholder="Deal Name"
                 value={formData.name}
                 onChange={handleChange}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
             />
 
+            {/* PRICE */}
             <input
                 name="price"
                 type="number"
                 placeholder="Deal Price"
                 value={formData.price}
                 onChange={handleChange}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
             />
 
-            <input
-                name="startDate"
-                type="date"
-                value={formData.startDate}
-                onChange={handleChange}
-            />
+            {/* DATES */}
+            <div className="grid grid-cols-2 gap-4">
+                <input
+                    name="startDate"
+                    type="date"
+                    value={formData.startDate}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                />
 
-            <input
-                name="endDate"
-                type="date"
-                value={formData.endDate}
-                onChange={handleChange}
-            />
+                <input
+                    name="endDate"
+                    type="date"
+                    value={formData.endDate}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg"
+                />
+            </div>
 
             {/* TYPE TOGGLE */}
-            <div>
-                <h4>Deal Type</h4>
-                <button type="button" onClick={() => handleTypeChange('item')}>
-                    Item Deal
-                </button>
-                <button type="button" onClick={() => handleTypeChange('combo')}>
-                    Combo Deal
-                </button>
+            <div className="flex flex-col gap-2">
+                <h4 className="font-semibold">Deal Type</h4>
+
+                <div className="flex gap-3">
+                    <button
+                        type="button"
+                        onClick={() => handleTypeChange('item')}
+                        className={`px-4 py-2 rounded-lg border transition ${
+                            formData.type === 'item'
+                                ? 'bg-black text-white'
+                                : 'bg-white hover:bg-slate-100'
+                        }`}
+                    >
+                        Item Deal
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => handleTypeChange('combo')}
+                        className={`px-4 py-2 rounded-lg border transition ${
+                            formData.type === 'combo'
+                                ? 'bg-black text-white'
+                                : 'bg-white hover:bg-slate-100'
+                        }`}
+                    >
+                        Combo Deal
+                    </button>
+                </div>
             </div>
 
             {/* ITEM SELECTION */}
             {formData.type === 'item' && (
-                <div>
-                    <h4>Select ONE Item</h4>
-                    {items.map((item) => (
-                        <label key={item.id}>
-                            <input
-                                type="radio"
-                                name="itemSelection"
-                                checked={formData.selectedItem === item.id}
-                                onChange={() => handleItemSelect(item.id)}
-                            />
-                            {item.name}
-                            <br/>
-                        </label>
-                    ))}
+                <div className="flex flex-col gap-2">
+                    <h4 className="font-semibold">Select Item</h4>
+
+                    <div className="flex flex-col gap-2">
+                        {items.map((item) => (
+                            <label
+                                key={item.id}
+                                className="flex items-center gap-2 text-sm"
+                            >
+                                <input
+                                    type="radio"
+                                    checked={formData.selectedItem === item.id}
+                                    onChange={() => handleItemSelect(item.id)}
+                                />
+                                {item.name}
+                            </label>
+                        ))}
+                    </div>
                 </div>
             )}
 
-            {/* COMBO SELECTION (RADIO) */}
+            {/* COMBO SELECTION */}
             {formData.type === 'combo' && (
-                <div>
-                    <h4>Select ONE Combo</h4>
-                    {combos.map((combo) => (
-                        <label key={combo.id}>
-                            <input
-                                type="radio"
-                                name="comboSelection"
-                                checked={formData.selectedCombo === combo.id}
-                                onChange={() => handleComboSelect(combo.id)}
-                            />
-                            {combo.name}
-                            <br/>
-                        </label>
-                    ))}
+                <div className="flex flex-col gap-2">
+                    <h4 className="font-semibold">Select Combo</h4>
+
+                    <div className="flex flex-col gap-2">
+                        {combos.map((combo) => (
+                            <label
+                                key={combo.id}
+                                className="flex items-center gap-2 text-sm"
+                            >
+                                <input
+                                    type="radio"
+                                    checked={formData.selectedCombo === combo.id}
+                                    onChange={() => handleComboSelect(combo.id)}
+                                />
+                                {combo.name}
+                            </label>
+                        ))}
+                    </div>
                 </div>
             )}
 
-            <button type="submit">Create Deal</button>
+            {/* SUBMIT */}
+            <button
+                type="submit"
+                className="bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
+            >
+                Create Deal
+            </button>
         </form>
     );
 }

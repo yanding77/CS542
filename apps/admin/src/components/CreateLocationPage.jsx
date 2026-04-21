@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthLayout from "./AuthLayout.jsx";
 
 export default function CreateLocationPage() {
     const [username, setUsername] = useState('');
@@ -40,35 +41,52 @@ export default function CreateLocationPage() {
     };
 
     return (
-        <div>
-            <h2>Location Account Creation</h2>
+        <div className="bg-neutral-800">
+            <AuthLayout
+                title="Create Location Account"
+                subtitle="Enter new account information below to create a new account"
+            >
+                <form onSubmit={handleCreation} className="flex flex-col gap-3">
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="username"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
 
-            <form onSubmit={handleCreation}>
-                <input
-                    type="username"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="address"
+                        placeholder="Address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
 
-                <input
-                    type="address"
-                    placeholder="Address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                />
+                    <button
+                        type="submit"
+                        className="bg-black text-white py-3 rounded-lg hover:bg-gray-800"
+                    >
+                        Create Location Account
+                    </button>
 
-                <button type="submit">Create Account</button>
-            </form>
-
-            <button onClick={() => navigate('/owner/dashboard')}>Back</button>
+                    <button
+                        type="button"
+                        onClick={() => navigate('/owner/dashboard')}
+                        className="text-sm text-gray-500 hover:underline"
+                    >
+                        Back
+                    </button>
+                </form>
+            </AuthLayout>
         </div>
     );
 }
