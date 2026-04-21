@@ -3,6 +3,8 @@ import { Owner } from './owner.entity';
 import { Menu } from './menu.entity';
 import { Item } from './item.entity';
 import { Table } from './table.entity';
+import {Combo} from "./combo.entity";
+import {Order} from "./order.entity";
 
 @Entity('locations')
 export class Location {
@@ -30,6 +32,12 @@ export class Location {
     @OneToMany(() => Item, (item) => item.location)
     items: Item[];
 
+    @OneToMany(() => Combo, (combo) => combo.location)
+    combos: Combo[];
+
     @OneToMany(() => Table, (table) => table.location)
     tables: Table[];
+
+    @OneToMany(() => Order, (order) => order.location)
+    orders: Order[];
 }

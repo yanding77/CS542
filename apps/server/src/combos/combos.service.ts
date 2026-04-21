@@ -45,10 +45,18 @@ export class CombosService {
     }
 
     async getCombosByLocation(locationId: string) {
-        return this.comboRepo.find({
-            where: {
-                location: { id: locationId },
-            },
-        });
+        console.log(JSON.stringify(await this.comboRepo
+            .createQueryBuilder('combo')
+            .leftJoinAndSelect('combo.comboItems', 'comboItem')
+            .leftJoinAndSelect('comboItem.item', 'item')
+            .where('combo.locationId = :locationId', { locationId })
+            .getMany(), null, 2));
+
+        return this.comboRepo
+            .createQueryBuilder('combo')
+            .leftJoinAndSelect('combo.comboItems', 'comboItem')
+            .leftJoinAndSelect('comboItem.item', 'item')
+            .where('combo.locationId = :locationId', { locationId })
+            .getMany();
     }
 }

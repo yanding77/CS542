@@ -36,8 +36,10 @@ export default function LocationLogin() {
         localStorage.setItem('jwt', data.access_token);
         localStorage.setItem('role', payload.role);
 
+        const locationId = payload.sub;
+
         // go to location dashboard if credentials checkout
-        navigate('/location/dashboard');
+        navigate(`/location/dashboard/${locationId}`);
     };
 
     return (

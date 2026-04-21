@@ -1,4 +1,4 @@
-import {Controller, Post, Body, Get, Request, UseGuards, ForbiddenException, Req} from '@nestjs/common';
+import {Controller, Post, Body, Get, Request, UseGuards, ForbiddenException, Req, Param} from '@nestjs/common';
 import { LocationsService } from './locations.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -19,13 +19,26 @@ export class LocationsController {
     }
 
     @UseGuards(AuthGuard('jwt'))
-    @Get('dashboard')
-    getDashboard(@Request() req) {
-        if (req.user.role !== 'location') {
-            throw new ForbiddenException('Access denied');
+    @Get('dashboard/:locationId')
+    async getDashboard(
+        @Param('locationId') locationId: string,
+        @Req() req
+    ) {
+        console.log('USER:', req.user);
+        console.log('LOCATION ID:', locationId);
+
+        const user = req.user;
+
+        // LOCATION USERS -> only allowed their own dashboard
+        if (user.role === 'location') {
+            return this.locationsService.getDashboard(user.sub);
         }
 
-        // TODO: remove after testing
-        return { message: `Welcome Location ${req.user.sub}!` };
+        // OWNER USERS -> can access any location
+        if (user.role === 'owner') {
+            return this.locationsService.getDashboard(locationId);
+        }
+
+        throw new ForbiddenException('Invalid role');
     }
 }

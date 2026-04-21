@@ -20,7 +20,7 @@ export class Combo {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @ManyToOne(() => Location, (location) => location.menus, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Location, (location) => location.combos, { onDelete: 'CASCADE' })
     location: Location;
 
     @Column()
