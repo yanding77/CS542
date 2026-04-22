@@ -35,14 +35,8 @@ Ensure your environment matches our production specifications:
    npm install
    ```
 
-2. **Start the Database**
-   Launch the PostgreSQL container in the background:
-   ```bash
-   npm run db:up
-   ```
-
-3. **Launch the Application Stack**
-   Start the Client, Admin, and Server applications concurrently:
+2. **Launch the Application Stack**
+   Start the Client, Admin, Server, PostgreSQL applications concurrently:
    ```bash
    npm run dev
    ```
