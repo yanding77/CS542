@@ -1,6 +1,6 @@
-import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
-import {BaseMenuItem, ItemDTO, TableCart} from "../types/types";
-import {CompleteMenuItems} from "../data/menu";
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BaseMenuItem, ItemDTO, TableCart } from "../types/types";
+import { CompleteMenuItems } from "../data/menu";
 
 @Injectable()
 export class CartService {
@@ -39,7 +39,7 @@ export class CartService {
         if (cart.itemCount >= 50) throw new BadRequestException('Cart if full');
 
         const existingItem = cart.items.find(
-            (i) => i.id === dto.productId && i.addedBy === dto.clientId,
+            (i) => i.id === dto.productId,
         );
 
         if (existingItem) {
@@ -64,7 +64,7 @@ export class CartService {
         if (!menuItem) throw new NotFoundException('Product not found in menu');
 
         const itemIndex = cart.items.findIndex(
-            (i) => i.id === dto.productId && i.addedBy === dto.clientId,
+            (i) => i.id === dto.productId,
         );
 
         if (itemIndex === -1) throw new NotFoundException('Product not found in cart');

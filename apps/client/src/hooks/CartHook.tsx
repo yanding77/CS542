@@ -14,12 +14,14 @@ export const useCart = (tableID: string) => {
             }
             return status.json();
         },
+        refetchInterval: 1000,
+        refetchIntervalInBackground: true,
     })
 
     const addToCart = useMutation({
         mutationFn: async (dto: ItemDTO) => {
             const status = await fetch(`/api/cart/${tableID}/add`, {
-                method: "POST",
+                method: "PATCH",
                 body: JSON.stringify(dto),
                 headers: {
                     'Content-Type': 'application/json',

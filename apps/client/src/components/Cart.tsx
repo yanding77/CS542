@@ -1,19 +1,22 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {useRef} from "react";
-import {useCart} from "../hooks/CartHook.tsx";
+import { useRef } from "react";
+import { useCart } from "../hooks/CartHook.tsx";
+import { useSession } from '../hooks/GuestIDContext.tsx';
 
 export default function Cart() {
     const [isOpen, setIsOpen] = useState(false);
     const isDragged = useRef(false);
     const constraintsRef = useRef(null);
 
-    const {cart, addItem, deleteItem} = useCart("mesa1");
-    const myGuestID = 'guest';
+    const { guestId, tableId } = useSession();
+
+    const { cart, addItem, deleteItem } = useCart(tableId);
+
 
 
     return (
-            <div ref={constraintsRef} className="fixed inset-0 pointer-events-none">
+        <div ref={constraintsRef} className="fixed inset-0 pointer-events-none">
             <AnimatePresence>
                 {!isOpen && (
                     <motion.div
@@ -24,16 +27,16 @@ export default function Cart() {
                             power: 0.1
                         }}
 
-                        onDragStart={ () =>{
+                        onDragStart={() => {
                             isDragged.current = true;
                         }}
-                        onDragEnd={ () =>{
-                            setTimeout(()=>{
+                        onDragEnd={() => {
+                            setTimeout(() => {
                                 isDragged.current = false
                             }, 100);
                         }}
                         onClick={() => {
-                            if(!isDragged.current){
+                            if (!isDragged.current) {
                                 setIsOpen(true);
                             }
                         }}
@@ -45,10 +48,10 @@ export default function Cart() {
                         <div className="relative bg-[#ffcc00] p-5 rounded-full shadow-2xl border-4 border-white">
                             <span className="text-3xl">🛒</span> {/* Placeholder */}
                             {cart?.itemCount && cart.itemCount > 0 ? (
-                            <div className="absolute -top-2 -right-2 bg-[#e74c3c] text-white text-xs font-black w-7 h-7 rounded-full flex items-center justify-center border-2 border-white tabular-nums">
-                                {cart.itemCount}
-                            </div>
-                                ): null}
+                                <div className="absolute -top-2 -right-2 bg-[#e74c3c] text-white text-xs font-black w-7 h-7 rounded-full flex items-center justify-center border-2 border-white tabular-nums">
+                                    {cart.itemCount}
+                                </div>
+                            ) : null}
 
                         </div>
                     </motion.div>
@@ -84,54 +87,51 @@ export default function Cart() {
                             <div className="flex-1 p-6 flex flex-col min-h-0">
                                 {cart?.itemCount && cart.itemCount > 0 ? (
                                     <>
-                                <ul className="flex-1 overflow-y-auto custom-scrollbar space-y-2">
-                                    {cart.items.map((item) => (
-                                        <motion.li
-                                            key={item.id}
-                                            className="flex justify-between items-center bg-gray-50/50 p-3 rounded-2xl border border-transparent hover:border-[#ffcc00] transition-colors"
-                                            initial={{ opacity: 0, x: -10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: 20 }}
+                                        <ul className="flex-1 overflow-y-auto custom-scrollbar space-y-2">
+                                            {cart.items.map((item) => (
+                                                <motion.li
+                                                    key={item.id}
+                                                    className="flex justify-between items-center bg-gray-50/50 p-3 rounded-2xl border border-transparent hover:border-[#ffcc00] transition-colors"
+                                                >
+                                                    <div className="flex flex-col">
+                                                        <span className="font-bold text-[#2a2a2a] leading-tight">{item.name}</span>
+                                                        <div className="flex items-center gap-1">
+                                                            <button
+                                                                onClick={() => addItem({ productId: item.id, clientId: guestId })}
+                                                                className="w-6 h-6 flex items-center justify-center hover:bg-green-50 rounded-md transition-colors font-bold"
+                                                            >
+                                                                ＋
+                                                            </button>
+                                                            <span className="leading-6 text-xs text-gray-400 font-mono uppercase">{item.quantity}</span>
+                                                            <button
+                                                                onClick={() => deleteItem({ productId: item.id, clientId: guestId })}
+                                                                className="w-6 h-6 flex items-center justify-center hover:bg-red-50 rounded-md transition-colors font-bold"
+                                                            >
+                                                                －
+                                                            </button>
+                                                            <span className="leading-6 text-xs text-gray-400 font-mono uppercase ml-4">${item.price}</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <span className="font-black text-[#2a2a2a] tabular-nums">${(item.price * item.quantity).toFixed(2)}</span>
+                                                    </div>
+                                                </motion.li>
+                                            ))}
+                                        </ul>
+                                        <div className="mt-8 pt-5 border-t-2 border-[#e4c9a6] flex justify-between items-center">
+                                            <span className="font-black text-xl uppercase tracking-tighter">Total a Pagar </span>
+                                            <span className="text-3xl font-black text-[#2a2a2a] tabular-nums">{`$ ${cart?.totalPrice}`}</span>
+                                        </div>
+
+                                        <motion.button
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            className="w-full mt-8 bg-[#ffcc00] hover:bg-[#e6b800] text-[#2a2a2a] font-black py-4 rounded-xl shadow-lg uppercase tracking-widest text-sm"
                                         >
-                                            <div className="flex flex-col">
-                                                <span className="font-bold text-[#2a2a2a] leading-tight">{item.name}</span>
-                                                <div className="flex items-center gap-1">
-                                                    <button
-                                                        onClick={() => addItem({productId: item.id, clientId: myGuestID})}
-                                                        className="w-6 h-6 flex items-center justify-center hover:bg-green-50 rounded-md transition-colors font-bold"
-                                                    >
-                                                        ＋
-                                                    </button>
-                                                <span className="leading-6 text-xs text-gray-400 font-mono uppercase">{item.quantity}</span>
-                                                    <button
-                                                        onClick={() => deleteItem({productId: item.id, clientId: myGuestID})}
-                                                        className="w-6 h-6 flex items-center justify-center hover:bg-red-50 rounded-md transition-colors font-bold"
-                                                    >
-                                                        －
-                                                    </button>
-                                                    <span className="leading-6 text-xs text-gray-400 font-mono uppercase ml-4">${item.price}</span>
-
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <span className="font-black text-[#2a2a2a] tabular-nums">${(item.price * item.quantity).toFixed(2)}</span>
-                                            </div>
-                                        </motion.li>
-                                    ))}
-                                </ul>
-                                <div className="mt-8 pt-5 border-t-2 border-[#e4c9a6] flex justify-between items-center">
-                                    <span className="font-black text-xl uppercase tracking-tighter">Total a Pagar </span>
-                                    <span className="text-3xl font-black text-[#2a2a2a] tabular-nums">{`$ ${cart?.totalPrice}`}</span>
-                                </div>
-
-                                <motion.button
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="w-full mt-8 bg-[#ffcc00] hover:bg-[#e6b800] text-[#2a2a2a] font-black py-4 rounded-xl shadow-lg uppercase tracking-widest text-sm"
-                                >
-                                    Confirmar Pedido!
-                                </motion.button>
-                                    </> ):
+                                            Confirmar Pedido!
+                                        </motion.button>
+                                    </>) :
                                     <span className="font-black text-xl uppercase tracking-tighter">Esta vacia tu hvd!</span>
                                 }
                             </div>
