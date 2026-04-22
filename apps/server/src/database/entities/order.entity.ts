@@ -8,7 +8,7 @@ export class Order {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @ManyToOne(() => Location, (location) => location.menus, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Location, (location) => location.orders, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'locationId' })
     location: Location;
 

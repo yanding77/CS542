@@ -1,10 +1,10 @@
-import {Entity, PrimaryColumn, Column, OneToMany} from 'typeorm';
+import {Entity, PrimaryColumn, Column, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {ItemAllergen} from "./item_allergen.entity";
 
 // allergen(id, name, itemAllergen (FK))
 @Entity('allergens')
 export class Allergen {
-    @PrimaryColumn('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column()

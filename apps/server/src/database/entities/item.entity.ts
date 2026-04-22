@@ -5,7 +5,7 @@ import {ComboItem} from "./combo_item.entity";
 import {DealItem} from "./deal_item.entity";
 import {ItemAllergen} from "./item_allergen.entity";
 import {OrderItem} from "./order_item.entity";
-
+import { ItemCategory } from './item-category.enum'
 
 @Entity('items')
 export class Item {
@@ -21,8 +21,14 @@ export class Item {
     @Column('float')
     price: number;
 
+    @Column({
+        type: 'enum',
+        enum: ItemCategory,
+    })
+    category: ItemCategory;
+
     @OneToMany(() => MenuItem, (menuItem) => menuItem.item,
-        { onDelete: 'CASCADE' })
+        { nullable: true })
     menuItems: MenuItem[];
 
     @OneToMany(() => ComboItem, (comboItem) => comboItem.item,

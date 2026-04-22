@@ -6,6 +6,12 @@ import RegisterOwner from "./components/RegisterOwner.jsx";
 import OwnerDashboard from './components/OwnerDashboard.jsx';
 import LocationDashboard from './components/LocationDashboard';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import CreateLocationPage from "./components/CreateLocationPage.jsx";
+import LocationManager from "./components/LocationManager.jsx";
+import ItemsPage from "./components/ItemsPage.jsx";
+import CombosPage from "./components/CombosPage.jsx";
+import DealsPage from "./components/DealsPage.jsx";
+import MenusPage from "./components/MenusPage.jsx";
 
 function App() {
     return (
@@ -17,16 +23,72 @@ function App() {
             <Route
                 path="/owner/dashboard"
                 element={
-                    <ProtectedRoute allowedRole="owner">
+                    <ProtectedRoute allowedRole={["owner"]}>
                         <OwnerDashboard />
                     </ProtectedRoute>
                 }
             />
             <Route
-                path="/location/dashboard"
+                path="/owner/create-location"
                 element={
-                    <ProtectedRoute allowedRole="location">
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <CreateLocationPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/location/dashboard/:locationId"
+                element={
+                    <ProtectedRoute allowedRole={["location"]}>
                         <LocationDashboard />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/location/dashboard/:locationId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <LocationDashboard />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/location/:locationId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <LocationManager />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/location/:locationId/items"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <ItemsPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/location/:locationId/combos"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <CombosPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/location/:locationId/deals"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <DealsPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/location/:locationId/menus"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <MenusPage />
                     </ProtectedRoute>
                 }
             />

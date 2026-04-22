@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn } from 'typeorm';
+import {Entity, PrimaryColumn, Column, OneToOne, JoinColumn, CreateDateColumn, PrimaryGeneratedColumn} from 'typeorm';
 import { Item } from './item.entity';
 
 @Entity('desserts')
@@ -14,7 +14,7 @@ export class Dessert {
     description: string;
 
     @Column('int', { nullable: true })
-    prepTime: number;
+    prepTime: number | null;
 
     @CreateDateColumn()
     created_at: Date;

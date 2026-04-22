@@ -1,16 +1,14 @@
 import { Navigate } from 'react-router-dom';
 
-// This is for protecting certain routes that should only be seen by certain roles (owner or location)
-export default function ProtectedRoute({ children, allowedRole }) {
+export default function ProtectedRoute({ children, allowedRoles = [] }) {
     const token = localStorage.getItem('jwt');
     const role = localStorage.getItem('role');
 
-    // if a person is not logged in, kick them to the login screen
     if (!token) {
         return <Navigate to="/" />;
     }
 
-    if (allowedRole && role !== allowedRole) {
+    if (allowedRoles.length > 0 && !allowedRoles.includes(role)) {
         return <Navigate to="/" />;
     }
 

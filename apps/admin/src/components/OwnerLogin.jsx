@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthLayout from "./AuthLayout.jsx";
 
 export default function OwnerLogin() {
     const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ export default function OwnerLogin() {
         const res = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password, role: 'owner' }), // 👈 important
+            body: JSON.stringify({ email: email, password: password, role: 'owner' }),
         });
 
         const data = await res.json();
@@ -41,28 +42,44 @@ export default function OwnerLogin() {
     };
 
     return (
-        <div>
-            <h2>Owner Login</h2>
+        <div className="bg-neutral-800">
+            <AuthLayout
+                title="Owner Login"
+                subtitle="Sign in to manage your locations"
+            >
+                <form onSubmit={handleLogin} className="flex flex-col gap-3">
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
 
-            <form onSubmit={handleLogin}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+                    <input
+                        className="border p-3 rounded-lg"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                    <button
+                        type="submit"
+                        className="bg-black text-white py-3 rounded-lg hover:bg-gray-800"
+                    >
+                        Login
+                    </button>
 
-                <button type="submit">Login</button>
-            </form>
-
-            <button onClick={() => navigate('/')}>Back</button>
+                    <button
+                        type="button"
+                        onClick={() => navigate('/')}
+                        className="text-sm text-gray-500 hover:underline"
+                    >
+                        Back
+                    </button>
+                </form>
+            </AuthLayout>
         </div>
     );
 }
