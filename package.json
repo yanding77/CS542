@@ -12,7 +12,7 @@
     "dev:client": "npm run dev -w client",
     "dev:server": "npm run start:dev -w server",
     "dev:admin": "npm run dev -w admin",
-    "dev": "npm run db:up && concurrently -n \"NEST,VITE\" -c \"magenta,cyan\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "npm run db:up && concurrently -n \"NEST,VITE,ADMIN\" -c \"magenta,cyan\" \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:admin\"",
     "clean": "rm -rf node_modules package-lock.json apps/*/dist apps/*/node_modules",
     "test": "npm run test -w client"
   },

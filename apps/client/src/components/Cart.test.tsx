@@ -101,6 +101,8 @@ function mockCartState({
         addItem,
         cart,
         deleteItem,
+        isError: false,
+        isLoading: false,
         quantityMap: Object.fromEntries(cart.items.map((item) => [item.id, item.quantity])),
     });
 

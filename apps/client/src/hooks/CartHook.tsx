@@ -1,5 +1,5 @@
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import type {ItemDTO, TableCart} from "../types/menuTypes.ts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { ItemDTO, TableCart } from "../types/menuTypes.ts";
 
 export const useCart = (tableID: string) => {
 
@@ -9,13 +9,14 @@ export const useCart = (tableID: string) => {
         queryKey: ['cart', tableID],
         queryFn: async () => {
             const status = await fetch(`/api/cart/${tableID}`);
-            if (!status.ok){
+            if (!status.ok) {
                 throw new Error(`Error: ${status.status} ${status.statusText}`);
             }
             return status.json();
         },
-        refetchInterval: 1000,
+        refetchInterval: (query) => query.state.error ? false : 1000,
         refetchIntervalInBackground: true,
+        retry: false,
     })
 
     const addToCart = useMutation({
@@ -27,13 +28,13 @@ export const useCart = (tableID: string) => {
                     'Content-Type': 'application/json',
                 },
             });
-            if (!status.ok){
+            if (!status.ok) {
                 throw new Error("Network Error: Failed to add to cart");
             }
             return status.json();
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['cart', tableID]});
+            queryClient.invalidateQueries({ queryKey: ['cart', tableID] });
         },
     });
 
@@ -46,13 +47,13 @@ export const useCart = (tableID: string) => {
                     'Content-Type': 'application/json',
                 },
             });
-            if (!status.ok){
+            if (!status.ok) {
                 throw new Error('Network Error: Failed to delete from cart');
             }
             return status.json();
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['cart', tableID]});
+            queryClient.invalidateQueries({ queryKey: ['cart', tableID] });
         }
     });
 
@@ -65,6 +66,7 @@ export const useCart = (tableID: string) => {
 
     return {
         cart: cartQuery.data,
+        isError: cartQuery.isError,
         quantityMap: quantityMap,
         addItem: addToCart.mutate,
         deleteItem: removeFromCart.mutate,
