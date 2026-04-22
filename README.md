@@ -18,15 +18,6 @@ This project is structured as a Monorepo using `npm workspaces` to ensure type s
 - **Database**: PostgreSQL for normalized data storage (Owner → Location → Menu → Item entities).
 - **Caching & Pub/Sub (Pending)**: Redis for persistent cart storage and WebSocket event broadcasting.
 
-## ⚠️ Current Status & Missing Production Features
-
-This project is currently under active development. While foundational authentication, routing, and basic cart interactions are functional, the application requires the following to be considered **production-ready**:
-
-1. **Real-Time Synchronization (WebSockets)**: Instantly broadcast cart changes (add/remove) to all guests at the same table and push final orders to the admin dashboard.
-2. **Persistent Cart Storage (Redis)**: Transition from in-memory cart storage to Redis to prevent data loss during server restarts.
-3. **Database-Driven Menus**: Migrate from static, hardcoded menu arrays to dynamic menus served directly from PostgreSQL.
-4. **Order Management Workflow**: Implement the full order lifecycle (submission, admin dashboard grouping, editing, and finalization).
-
 ## 🛠 Installation & Setup
 
 ### Prerequisites
