@@ -1,23 +1,64 @@
-# CS542
-Final Project
+# La Balsa POS
 
-Architecture Overview
-This project is structured as a Monorepo to ensure type safety and seamless coordination between the frontend and backend.
+A full-service, real-time restaurant POS (Point of Sale) system built as a CS542 Final Project.
 
-apps/client: A high-performance React application powered by Vite.
+Guests scan a QR code at their table, collaboratively build a shared cart in real-time, and push orders to the restaurant's admin dashboard. The admin staff can view incoming orders per table, merge orders, edit items, and finalize orders for the kitchen. 
 
-apps/server: nest js application
+## 🚀 Core Value Proposition
 
-Prerequisites
-Before starting, ensure your environment matches our production specifications:
+**Live Shared Carts:** Guests at the same table see the same cart updating live, and the restaurant receives those orders instantly. This real-time synchronization between guests, the server, and the admin dashboard is what elevates this from a simple menu website to a fully-fledged POS system.
 
-Node.js: v22.12.0 or higher 
+## 🏗 Architecture & Stack
 
-Package Manager: npm 
+This project is structured as a Monorepo using `npm workspaces` to ensure type safety and seamless coordination between the frontend and backend.
 
-Installation
-From the root directory, install all dependencies for both the client and server simultaneously:
-npm install
+- **Frontend (`apps/client`)**: High-performance React application powered by Vite, providing the guest-facing menu and cart.
+- **Admin Panel (`apps/admin`)**: React application for restaurant staff to manage incoming orders.
+- **Backend (`apps/server`)**: NestJS REST API with WebSocket gateway for real-time updates.
+- **Database**: PostgreSQL for normalized data storage (Owner → Location → Menu → Item entities).
+- **Caching & Pub/Sub (Pending)**: Redis for persistent cart storage and WebSocket event broadcasting.
 
-To launch the entire stack (Frontend + Backend) with a single command:
-npm run dev
+## ⚠️ Current Status & Missing Production Features
+
+This project is currently under active development. While foundational authentication, routing, and basic cart interactions are functional, the application requires the following to be considered **production-ready**:
+
+1. **Real-Time Synchronization (WebSockets)**: Instantly broadcast cart changes (add/remove) to all guests at the same table and push final orders to the admin dashboard.
+2. **Persistent Cart Storage (Redis)**: Transition from in-memory cart storage to Redis to prevent data loss during server restarts.
+3. **Database-Driven Menus**: Migrate from static, hardcoded menu arrays to dynamic menus served directly from PostgreSQL.
+4. **Order Management Workflow**: Implement the full order lifecycle (submission, admin dashboard grouping, editing, and finalization).
+
+## 🛠 Installation & Setup
+
+### Prerequisites
+
+Ensure your environment matches our production specifications:
+- **Node.js**: v22.12.0 or higher
+- **Package Manager**: npm
+- **Docker & Docker Compose**: Required for running PostgreSQL and Redis locally
+
+### Getting Started
+
+1. **Install dependencies**
+   From the root directory, install dependencies for all workspace applications simultaneously:
+   ```bash
+   npm install
+   ```
+
+2. **Start the Database**
+   Launch the PostgreSQL container in the background:
+   ```bash
+   npm run db:up
+   ```
+
+3. **Launch the Application Stack**
+   Start the Client, Admin, and Server applications concurrently:
+   ```bash
+   npm run dev
+   ```
+
+## 📚 CS542 Deliverables
+
+As part of the CS542 Database Systems course, the following database documentation will be included in the final submission:
+- Entity-Relationship (ER) Diagrams
+- BCNF Normalization Analysis
+- Advanced SQL Query Examples (Multi-table joins, aggregations, transactions)
