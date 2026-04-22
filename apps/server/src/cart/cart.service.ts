@@ -15,18 +15,26 @@ export class CartService {
                 price: item.price,
             });
         });
+
+        this.carts.set('mesa1', {
+            tableId: 'mesa1',
+            items: [],
+            totalPrice: 0,
+            itemCount: 0,
+        });
+
+        this.carts.set('mesa2', {
+            tableId: 'mesa2',
+            items: [],
+            totalPrice: 0,
+            itemCount: 0,
+        });
     }
 
     getCart(tableId: string): TableCart {
         let cart = this.carts.get(tableId);
         if (!cart) {
-            cart = {
-                tableId,
-                items: [],
-                totalPrice: 0,
-                itemCount: 0,
-            };
-            this.carts.set(tableId, cart);
+            throw new BadRequestException('Table not found');
         }
         return cart;
     }
