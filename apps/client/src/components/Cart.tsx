@@ -132,7 +132,7 @@ export default function Cart() {
                                             Confirmar Pedido!
                                         </motion.button>
                                     </>) :
-                                    <span className="font-black text-xl uppercase tracking-tighter">Esta vacia tu hvd!</span>
+                                    <span className="font-black text-xl uppercase tracking-tighter">Tu carrito esta vacio!</span>
                                 }
                             </div>
                         </motion.div>

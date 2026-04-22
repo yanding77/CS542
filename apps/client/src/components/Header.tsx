@@ -12,7 +12,7 @@ export default function MenuHeader() {
             <img
                 src={titleImage}
                 alt="La Balsa"
-                className="w-full object-cover aspect-[5/1]"
+                className="w-full object-cover sm:aspect-[8/1] aspect-[5/1]"
                 fetchPriority="high"
             />
         </header>
