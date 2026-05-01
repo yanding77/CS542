@@ -47,4 +47,5 @@ export interface TableCart {
 export interface SessionContextType {
     guestId: string;
     tableId: string;
+    locationId: string;
 }

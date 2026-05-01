@@ -1,10 +1,16 @@
 import { useRef, useState } from "react";
 import type { menuRefs } from "../types/menuTypes.ts";
 import MenuCategories from "./MenuCategories.tsx";
-import { categories, menu } from "../data/items.ts";
 import MenuItems from "./MenuItems.tsx";
+import { useSession } from "../hooks/GuestIDContext.tsx";
+import { useMenu } from "../hooks/MenuItemsHook.tsx";
+
+
 
 export default function MenuDisplay() {
+    const { locationId } = useSession();
+    const { data: menuItems = [] } = useMenu(locationId);
+    const categories = [... new Set(menuItems.map(item => item.category))];
     const [selectedCategory, setSelectedCategory] = useState('Entradas');
     const itemRefs = useRef<menuRefs>({});
 
@@ -30,7 +36,7 @@ export default function MenuDisplay() {
                 selectedCategory={selectedCategory}
                 onSelectCategory={handleSelectCategory}
             />
-            <MenuItems menuItems={menu} itemRefs={itemRefs} />
+            <MenuItems menuItems={menuItems} itemRefs={itemRefs} />
         </div>
     )
 }

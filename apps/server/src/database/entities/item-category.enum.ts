@@ -1,8 +1,8 @@
 export enum ItemCategory {
-    ENTREE = 'entree',
-    DRINK = 'drink',
-    DESSERT = 'dessert',
-    APPETIZER = 'appetizer',
-    SIDE = 'side',
-    ALCOHOL = 'alcohol',
+    ENTREE = 'Entradas',
+    DRINK = 'Gaseosas',
+    DESSERT = 'Postres',
+    APPETIZER = 'Piqueos',
+    SIDE = 'Adicionales',
+    ALCOHOL = 'Tragos',
 }

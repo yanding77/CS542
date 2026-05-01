@@ -1,10 +1,10 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, OneToOne, OneToMany} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, OneToOne, OneToMany } from 'typeorm';
 import { Location } from './location.entity';
-import {MenuItem} from "./menu_item.entity";
-import {ComboItem} from "./combo_item.entity";
-import {DealItem} from "./deal_item.entity";
-import {ItemAllergen} from "./item_allergen.entity";
-import {OrderItem} from "./order_item.entity";
+import { MenuItem } from "./menu_item.entity";
+import { ComboItem } from "./combo_item.entity";
+import { DealItem } from "./deal_item.entity";
+import { ItemAllergen } from "./item_allergen.entity";
+import { OrderItem } from "./order_item.entity";
 import { ItemCategory } from './item-category.enum'
 
 @Entity('items')
@@ -26,6 +26,9 @@ export class Item {
         enum: ItemCategory,
     })
     category: ItemCategory;
+
+    @Column({ nullable: true })
+    image: string;
 
     @OneToMany(() => MenuItem, (menuItem) => menuItem.item,
         { nullable: true })

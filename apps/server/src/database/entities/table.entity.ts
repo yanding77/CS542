@@ -1,6 +1,6 @@
-import {Entity, Column, JoinColumn, CreateDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
-import {Location} from "./location.entity";
-import {TableOrder} from "./table_order.entity";
+import { Entity, Column, JoinColumn, CreateDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Location } from "./location.entity";
+import { TableOrder } from "./table_order.entity";
 
 @Entity('tables')
 export class Table {
@@ -8,7 +8,7 @@ export class Table {
     id: string;
 
     @Column()
-    number: number;
+    tableid: string;
 
     @Column()
     locationId: string;

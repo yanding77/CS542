@@ -6,7 +6,7 @@ import ScanQRMessage from './components/ScanQRMessage.tsx';
 export default function App() {
   return (
     <Routes>
-      <Route path="/:tableId" element={
+      <Route path="/:locationId/:tableId" element={
         <SessionProvider>
           <RestaurantLayout />
         </SessionProvider>
