@@ -1,4 +1,4 @@
-import titleImage from '/pics/title.jpeg';
+import titleImage from '/title.jpeg';
 
 export default function MenuHeader() {
     return (

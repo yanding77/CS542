@@ -1,4 +1,4 @@
-import bgImage from '/pics/kk.jpeg';
+import bgImage from '/kk.jpeg';
 
 import type { menuCategoriesProps } from "../types/menuTypes.ts";
 
@@ -36,11 +36,10 @@ export default function MenuCategories({
                                     py-1.5
                                     text-sm sm:text-base md:text-lg
                                     transition-all duration-300 ease-in-out
-                                    ${
-                                    isActive
+                                    ${isActive
                                         ? 'bg-[#ffcc00] text-[#333] font-bold shadow-[0_4px_8px_rgba(0,0,0,0.15)]'
                                         : 'bg-[#f5ebd5] hover:bg-[#e4c9a6] hover:text-white hover:scale-[1.05]'
-                                }
+                                    }
                                     `}
                             >
                                 {category}

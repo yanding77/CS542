@@ -6,7 +6,7 @@ import { v4 } from "uuid";
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export function SessionProvider({ children }: { children: ReactNode }) {
-    const { tableId } = useParams<{ tableId: string }>();
+    const { tableId, locationId } = useParams<{ tableId: string; locationId: string }>();
 
     // Generate a guest ID once and persist it across page refreshes
     const [guestId] = useState(() => {
@@ -18,12 +18,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     });
 
     // If no tableId in the URL, this provider shouldn't render
-    if (!tableId) {
+    if (!tableId || !locationId) {
         return <div>Error: No table ID found. Please scan a valid QR code.</div>;
     }
 
     return (
-        <SessionContext.Provider value={{ guestId, tableId }}>
+        <SessionContext.Provider value={{ guestId, tableId, locationId }}>
             {children}
         </SessionContext.Provider>
     );

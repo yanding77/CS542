@@ -3,6 +3,7 @@ import {describe, it, expect, vi, afterEach} from "vitest";
 import App from "../src/App.js";
 import * as matchers from '@testing-library/jest-dom/matchers'; // Import matchers
 import MenuCategories from "../src/components/MenuCategories.tsx";
+import { MemoryRouter } from 'react-router-dom';
 
 expect.extend(matchers);
 
@@ -14,7 +15,11 @@ describe('App testing', () => {
     it('scrolls the menu when a category is selected', () => {
         window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
-        render(<App/>);
+        render(
+            <MemoryRouter initialEntries={['/labalsa/mesa1']}>
+                <App/>
+            </MemoryRouter>
+        );
 
         const categoryBtn = screen.getByRole('button', {name: "Ceviches"});
         fireEvent.click(categoryBtn);

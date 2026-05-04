@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {In, Repository} from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Item } from '../database/entities/item.entity';
-import {Allergen} from "../database/entities/allergen.entity";
-import {CreateItemDto} from "./CreateItemDto";
-import {ItemAllergen} from "../database/entities/item_allergen.entity";
-import {Alcohol} from "../database/entities/alcohol.entity";
-import {Appetizer} from "../database/entities/appetizer.entity";
-import {Drink} from "../database/entities/drink.entity";
-import {Entree} from "../database/entities/entree.entity";
-import {Side} from "../database/entities/side.entity";
-import {Dessert} from "../database/entities/dessert.entity";
+import { Allergen } from "../database/entities/allergen.entity";
+import { CreateItemDto } from "./CreateItemDto";
+import { ItemAllergen } from "../database/entities/item_allergen.entity";
+import { Alcohol } from "../database/entities/alcohol.entity";
+import { Appetizer } from "../database/entities/appetizer.entity";
+import { Drink } from "../database/entities/drink.entity";
+import { Entree } from "../database/entities/entree.entity";
+import { Side } from "../database/entities/side.entity";
+import { Dessert } from "../database/entities/dessert.entity";
+import { ItemCategory } from 'src/database/entities/item-category.enum';
 
 @Injectable()
 export class ItemsService {
@@ -41,12 +42,20 @@ export class ItemsService {
 
         @InjectRepository(Dessert)
         private dessertRepo: Repository<Dessert>
-    ) {}
+    ) { }
 
-    async getItemsByLocation(locationId: string) {
+    async getItemsByLocation(slug: string) {
         return this.itemRepo.find({
             where: {
-                location: { id: locationId },
+                location: { id: slug },
+            },
+        });
+    }
+
+    async getSlug(slug: string) {
+        return this.itemRepo.find({
+            where: {
+                location: { username: slug },
             },
         });
     }
@@ -62,6 +71,7 @@ export class ItemsService {
             alcoholContent,
             refillable,
             locationId,
+            image,
         } = dto;
 
         // 1. Load allergen entities
@@ -75,6 +85,7 @@ export class ItemsService {
             price,
             location: { id: locationId },
             category: category,
+            image: image,
         });
 
         const savedItem = await this.itemRepo.save(item);
@@ -91,7 +102,7 @@ export class ItemsService {
 
         // 4. Create subtype row based on category
         switch (category) {
-            case 'alcohol':
+            case ItemCategory.ALCOHOL:
                 await this.alcoholRepo.save({
                     id: savedItem.id,
                     item: savedItem,
@@ -99,7 +110,7 @@ export class ItemsService {
                 });
                 break;
 
-            case 'appetizer':
+            case ItemCategory.APPETIZER:
                 await this.appetizerRepo.save({
                     id: savedItem.id,
                     item: savedItem,
@@ -107,7 +118,7 @@ export class ItemsService {
                 });
                 break;
 
-            case 'dessert':
+            case ItemCategory.DESSERT:
                 await this.dessertRepo.save({
                     id: savedItem.id,
                     item: savedItem,
@@ -116,7 +127,7 @@ export class ItemsService {
                 });
                 break;
 
-            case 'drink':
+            case ItemCategory.DRINK:
                 await this.drinkRepo.save({
                     id: savedItem.id,
                     item: savedItem,
@@ -124,7 +135,7 @@ export class ItemsService {
                 });
                 break;
 
-            case 'entree':
+            case ItemCategory.ENTREE:
                 await this.entreeRepo.save({
                     id: savedItem.id,
                     item: savedItem,
@@ -132,7 +143,7 @@ export class ItemsService {
                 });
                 break;
 
-            case 'side':
+            case ItemCategory.SIDE:
                 await this.sideRepo.save({
                     id: savedItem.id,
                     item: savedItem,

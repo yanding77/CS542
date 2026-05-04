@@ -1,14 +1,14 @@
-import {Body, Controller, Get, Param, Post, Req, UseGuards} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { AuthGuard } from '@nestjs/passport';
-import {AllergensService} from "../allergens/allergens.service";
+import { AllergensService } from "../allergens/allergens.service";
 
 @Controller('items')
 export class ItemsController {
     constructor(
         private itemsService: ItemsService,
         private allergensService: AllergensService,
-    ) {}
+    ) { }
 
     @Get('allergens')
     getAllergens() {
@@ -21,9 +21,10 @@ export class ItemsController {
         return this.itemsService.createItem(body);
     }
 
-    @UseGuards(AuthGuard('jwt'))
-    @Get(':locationId')
-    getItemsByLocation(@Param('locationId') locationId: string) {
-        return this.itemsService.getItemsByLocation(locationId);
+    @Get(':slug')
+    getItemsByLocation(@Param('slug') slug: string) {
+        return this.itemsService.getSlug(slug);
     }
+
+
 }

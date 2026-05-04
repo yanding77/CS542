@@ -1,46 +1,58 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { BaseMenuItem, ItemDTO, TableCart } from "../types/types";
-import { CompleteMenuItems } from "../data/menu";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Item } from '../database/entities/item.entity';
+import { Table } from '../database/entities/table.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class CartService {
+export class CartService implements OnModuleInit {
     private readonly carts = new Map<string, TableCart>();
     private readonly menuItems = new Map<string, BaseMenuItem>();
 
-    constructor() {
-        CompleteMenuItems.forEach(item => {
-            this.menuItems.set(item.id, {
-                id: item.id,
-                name: item.name,
-                price: item.price,
-            });
+    constructor(
+        @InjectRepository(Item)
+        private itemRepo: Repository<Item>,
+        @InjectRepository(Table)
+        private tableRepo: Repository<Table>,
+    ) { }
+
+    async onModuleInit() {
+        const items = await this.itemRepo.find();
+        items.forEach(item => {
+            this.menuItems.set(item.id,
+                {
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                }
+            )
         });
 
-        this.carts.set('mesa1', {
-            tableId: 'mesa1',
-            items: [],
-            totalPrice: 0,
-            itemCount: 0,
-        });
-
-        this.carts.set('mesa2', {
-            tableId: 'mesa2',
-            items: [],
-            totalPrice: 0,
-            itemCount: 0,
-        });
+        const tables = await this.tableRepo.find();
+        tables.forEach(table => {
+            this.carts.set(String(table.tableid), {
+                tableId: String(table.tableid),
+                items: [],
+                totalPrice: 0,
+                itemCount: 0,
+            })
+        })
     }
 
-    getCart(tableId: string): TableCart {
+
+    async getCart(tableId: string): Promise<TableCart> {
         let cart = this.carts.get(tableId);
         if (!cart) {
-            throw new BadRequestException('Table not found');
+            const table = await this.tableRepo.findOne({ where: { tableid: tableId } });
+            if (!table) throw new BadRequestException("Table not found");
+            cart = { tableId, items: [], totalPrice: 0, itemCount: 0 }
         }
         return cart;
     }
 
-    addItem(tableId: string, dto: ItemDTO): TableCart {
-        const cart = this.getCart(tableId);
+    async addItem(tableId: string, dto: ItemDTO): Promise<TableCart> {
+        const cart = await this.getCart(tableId);
         const menuItem = this.menuItems.get(dto.productId);
 
         if (!menuItem) throw new NotFoundException('Product not found in menu');
@@ -66,8 +78,9 @@ export class CartService {
 
         return this.recalculate(cart);
     }
-    removeItem(tableId: string, dto: ItemDTO): TableCart {
-        const cart = this.getCart(tableId);
+
+    async removeItem(tableId: string, dto: ItemDTO): Promise<TableCart> {
+        const cart = await this.getCart(tableId);
         const menuItem = this.menuItems.get(dto.productId);
         if (!menuItem) throw new NotFoundException('Product not found in menu');
 

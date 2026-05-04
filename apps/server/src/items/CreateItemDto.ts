@@ -1,5 +1,5 @@
 import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
-import {ItemCategory} from "../database/entities/item-category.enum";
+import { ItemCategory } from "../database/entities/item-category.enum";
 
 export class CreateItemDto {
     @IsString()
@@ -31,4 +31,8 @@ export class CreateItemDto {
 
     @IsString()
     locationId: string;
+
+    @IsOptional()
+    @IsString()
+    image?: string;
 }

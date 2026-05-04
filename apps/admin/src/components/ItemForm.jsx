@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
+import { ItemCategory } from '../../../server/src/database/entities/item-category.enum.js';
 
 const categories = [
-    'alcohol',
-    'appetizer',
-    'dessert',
-    'drink',
-    'entree',
-    'side',
+    ItemCategory.ENTREE,
+    ItemCategory.DRINK,
+    ItemCategory.DESSERT,
+    ItemCategory.APPETIZER,
+    ItemCategory.SIDE,
+    ItemCategory.ALCOHOL
 ];
 
 export default function ItemForm({ onSubmit }) {
@@ -174,7 +175,7 @@ export default function ItemForm({ onSubmit }) {
             {/* CONDITIONAL FIELDS WRAPPER */}
             <div className="flex flex-col gap-4">
                 {/* Alcohol */}
-                {formData.category === 'alcohol' && (
+                {formData.category === ItemCategory.ALCOHOL && (
                     <input
                         name="alcoholContent"
                         placeholder="Alcohol %"
@@ -185,8 +186,8 @@ export default function ItemForm({ onSubmit }) {
                 )}
 
                 {/* Appetizer / Entree */}
-                {(formData.category === 'appetizer' ||
-                    formData.category === 'entree') && (
+                {(formData.category === ItemCategory.APPETIZER ||
+                    formData.category === ItemCategory.ENTREE) && (
                     <textarea
                         name="description"
                         placeholder="Description"
@@ -197,7 +198,7 @@ export default function ItemForm({ onSubmit }) {
                 )}
 
                 {/* Dessert */}
-                {formData.category === 'dessert' && (
+                {formData.category === ItemCategory.DESSERT && (
                     <div className="flex flex-col gap-3">
                     <textarea
                         name="description"
@@ -219,7 +220,7 @@ export default function ItemForm({ onSubmit }) {
                 )}
 
                 {/* Drink */}
-                {formData.category === 'drink' && (
+                {formData.category === ItemCategory.DRINK && (
                     <label className="flex items-center gap-2 text-sm">
                         <input
                             type="checkbox"
