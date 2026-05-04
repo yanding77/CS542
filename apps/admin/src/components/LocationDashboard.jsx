@@ -1,13 +1,14 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ItemCategory } from '../../../server/src/database/entities/item-category.enum.js';
 
 const CATEGORY_ORDER = [
-    'alcohol',
-    'appetizer',
-    'entree',
-    'drink',
-    'dessert',
-    'side',
+    ItemCategory.ENTREE,
+    ItemCategory.DRINK,
+    ItemCategory.DESSERT,
+    ItemCategory.APPETIZER,
+    ItemCategory.SIDE,
+    ItemCategory.ALCOHOL
 ];
 
 export default function LocationDashboard() {
