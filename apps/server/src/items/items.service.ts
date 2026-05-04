@@ -52,6 +52,14 @@ export class ItemsService {
         });
     }
 
+    async getSlug(slug: string) {
+        return this.itemRepo.find({
+            where: {
+                location: { username: slug },
+            },
+        });
+    }
+
     async createItem(dto: CreateItemDto) {
         const {
             name,

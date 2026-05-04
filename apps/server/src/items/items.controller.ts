@@ -21,10 +21,9 @@ export class ItemsController {
         return this.itemsService.createItem(body);
     }
 
-
     @Get(':slug')
     getItemsByLocation(@Param('slug') slug: string) {
-        return this.itemsService.getItemsByLocation(slug);
+        return this.itemsService.getSlug(slug);
     }
 
 
