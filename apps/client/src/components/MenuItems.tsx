@@ -1,6 +1,7 @@
 import type { MenuItemsProps } from "../types/menuTypes.ts";
 import { useCart } from "../hooks/CartHook.tsx";
 import { useSession } from "../hooks/GuestIDContext.tsx";
+import { getAssetUrl } from "../utils/assetUrl.ts";
 
 
 export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
@@ -42,7 +43,7 @@ export default function MenuItems({ menuItems, itemRefs }: MenuItemsProps) {
                             {item.image && (
                                 <div className="my-4">
                                     <img
-                                        src={`${item.image}`}
+                                        src={getAssetUrl(item.image)}
                                         alt={item.name}
                                         className="
                                     w-full max-w-[700px]

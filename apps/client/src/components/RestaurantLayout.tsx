@@ -18,8 +18,8 @@ export default function RestaurantLayout() {
     <div className="font-serif bg-[#f8f9f9] text-[#2a2a2a] h-[100dvh] overflow-hidden flex flex-col">
       <Header />
       <MenuDisplay />
-      <Cart />
       <Footer />
+      <Cart />
     </div>
   );
 }

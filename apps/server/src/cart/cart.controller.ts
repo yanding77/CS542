@@ -1,10 +1,10 @@
-import {Controller, Get, Param, Delete, Body, Patch} from '@nestjs/common';
-import {CartService} from "./cart.service";
-import {ItemDTO} from "../types/types";
+import { Controller, Get, Param, Delete, Body, Patch } from '@nestjs/common';
+import { CartService } from "./cart.service";
+import { ItemDTO } from "../types/types";
 
 @Controller('cart')
 export class CartController {
-    constructor(private readonly cartService: CartService) {}
+    constructor(private readonly cartService: CartService) { }
 
     @Get(':tableId')
     getCart(@Param('tableId') tableId: string) {
