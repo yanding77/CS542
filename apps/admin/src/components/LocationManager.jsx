@@ -103,6 +103,13 @@ export default function LocationManager() {
                                 <span className="material-symbols-outlined text-gray-500">menu_book</span>
                             </button>
 
+                            <button
+                                onClick={() => navigate(`/owner/location/${locationId}/tables`)}
+                                className="w-full px-5 py-4 border border-slate-200 rounded-lg hover:bg-slate-50 flex justify-between items-center transition"
+                            >
+                                <span>Manage Tables</span>
+                                <span className="material-symbols-outlined text-gray-500">table_bar</span>
+                            </button>
                         </div>
                     </div>
 
