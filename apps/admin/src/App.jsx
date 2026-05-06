@@ -12,6 +12,9 @@ import ItemsPage from "./components/ItemsPage.jsx";
 import CombosPage from "./components/CombosPage.jsx";
 import DealsPage from "./components/DealsPage.jsx";
 import MenusPage from "./components/MenusPage.jsx";
+import EditItemPage from "./components/EditItemPage.jsx";
+import EditComboPage from "./components/EditComboPage.jsx";
+import EditDealPage from "./components/EditDealPage.jsx";
 
 function App() {
     return (
@@ -89,6 +92,30 @@ function App() {
                 element={
                     <ProtectedRoute allowedRole={["owner"]}>
                         <MenusPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/items/edit/:itemId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditItemPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/combos/edit/:comboId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditComboPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/deals/edit/:dealId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditDealPage />
                     </ProtectedRoute>
                 }
             />

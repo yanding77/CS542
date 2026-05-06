@@ -1,16 +1,56 @@
 import { useState, useEffect, useMemo } from 'react';
 
-export default function ComboForm({ locationId, onSubmit }) {
-    const [formData, setFormData] = useState({
-        name: '',
-        price: '',
-    });
+export default function ComboForm({
+                                      locationId,
+                                      onSubmit,
+                                      initialData,
+                                      isEdit = false
+                                  }) {
+    const [formData, setFormData] = useState(
+        initialData || {
+            name: '',
+            price: '',
+        }
+    );
 
     const [items, setItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [openCategories, setOpenCategories] = useState({});
 
     const token = localStorage.getItem('jwt');
+
+    useEffect(() => {
+        if (!initialData) return;
+
+        setFormData({
+            name: initialData.name || '',
+            price: initialData.price || '',
+        });
+
+        setSelectedItems(
+            initialData.comboItems?.map(ci =>
+                ci.item?.id ?? ci.itemId ?? ci
+            ) || []
+        );
+    }, [initialData]);
+
+    useEffect(() => {
+        if (!locationId) return;
+
+        const fetchItems = async () => {
+            const res = await fetch(
+                `http://localhost:3000/api/items/${locationId}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+
+            const data = await res.json();
+            setItems(Array.isArray(data) ? data : []);
+        };
+
+        fetchItems();
+    }, [locationId, token]);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -81,7 +121,9 @@ export default function ComboForm({ locationId, onSubmit }) {
         >
             {/* HEADER */}
             <div className="text-center">
-                <h3 className="text-xl font-semibold">Create Combo</h3>
+                <h3 className="text-xl font-semibold">
+                    {isEdit ? 'Edit Combo' : 'Create Combo'}
+                </h3>
                 <p className="text-sm text-gray-500">
                     Select items to include in this combo
                 </p>
@@ -162,7 +204,7 @@ export default function ComboForm({ locationId, onSubmit }) {
                 type="submit"
                 className="bg-black text-white rounded-lg py-3 hover:bg-gray-800 transition"
             >
-                Create Combo
+                {isEdit ? 'Update Combo' : 'Create Combo'}
             </button>
         </form>
     );

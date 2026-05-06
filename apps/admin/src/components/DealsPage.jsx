@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import DealForm from './DealForm';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 export default function DealsPage() {
     const { locationId } = useParams();
@@ -37,6 +38,27 @@ export default function DealsPage() {
         }
 
         resetForm();
+        fetchDeals();
+    };
+
+    const handleDelete = async (dealId) => {
+        if (!window.confirm('Delete this deal?')) return;
+
+        const res = await fetch(
+            `http://localhost:3000/api/deals/delete/${dealId}`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (!res.ok) {
+            alert('Failed to delete deal');
+            return;
+        }
+
         fetchDeals();
     };
 
@@ -87,6 +109,26 @@ export default function DealsPage() {
 
                                 <div className="text-xs text-slate-400">
                                     {deal.startDate} → {deal.endDate}
+                                </div>
+
+                                <div className="flex items-center gap-3">
+                                    {/* EDIT */}
+                                    <button
+                                        onClick={() =>
+                                            navigate(`/owner/deals/edit/${deal.id}`)
+                                        }
+                                        className="p-2 border border-slate-300 rounded-lg hover:bg-slate-100 transition"
+                                    >
+                                        <PencilSquareIcon className="w-5 h-5 text-slate-600" />
+                                    </button>
+
+                                    {/* DELETE */}
+                                    <button
+                                        onClick={() => handleDelete(deal.id)}
+                                        className="p-2 border border-slate-300 rounded-lg hover:bg-red-100 transition"
+                                    >
+                                        <TrashIcon className="w-5 h-5 text-red-500" />
+                                    </button>
                                 </div>
                             </div>
                         ))}
