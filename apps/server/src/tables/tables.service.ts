@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Table } from '../database/entities/table.entity';
+import { Location } from '../database/entities/location.entity'
 
 @Injectable()
 export class TablesService {
     constructor(
         @InjectRepository(Table)
         private tableRepo: Repository<Table>,
+
+        @InjectRepository(Location)
+        private locationRepo: Repository<Location>,
     ) {}
 
     // GET all tables for a location
@@ -35,16 +39,25 @@ export class TablesService {
         locationId: string;
         qrCodeData?: string;
     }) {
-
         console.log('CREATE TABLE DATA:', data);
+
         if (!data.tableid || !data.locationId) {
             throw new Error('Missing required fields');
+        }
+
+        // ✅ fetch location to get username
+        const location = await this.locationRepo.findOne({
+            where: { id: data.locationId },
+        });
+
+        if (!location) {
+            throw new Error('Location not found');
         }
 
         const qrCodeData =
             data.qrCodeData && data.qrCodeData.trim() !== ''
                 ? data.qrCodeData
-                : `http://localhost:5170/${data.locationId}/${data.tableid}`;
+                : `http://localhost:5170/${location.username}/${data.tableid}`;
 
         const table = this.tableRepo.create({
             tableid: data.tableid,

@@ -33,6 +33,7 @@ export default function TablesPage() {
     // CREATE TABLE
     // -----------------------------
     const createTable = async (formData, resetForm) => {
+
         const res = await fetch(
             'http://localhost:3000/api/tables/create',
             {
@@ -129,7 +130,7 @@ export default function TablesPage() {
                                     </div>
 
                                     <div className="text-sm text-slate-500">
-                                        QR: {table.qrCodeData?.slice(0, 25)}...
+                                        QR: {table.qrCodeData}
                                     </div>
                                 </div>
 

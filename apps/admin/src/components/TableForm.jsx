@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function TableForm({ onSubmit, initialData, isEdit = false, locationId, locationUsername }) {
+export default function TableForm({ onSubmit, initialData, isEdit = false, locationId }) {
     const token = localStorage.getItem('jwt');
 
     const [formData, setFormData] = useState({
@@ -35,7 +35,7 @@ export default function TableForm({ onSubmit, initialData, isEdit = false, locat
     // -----------------------------
     // SUBMIT
     // -----------------------------
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const payload = {
