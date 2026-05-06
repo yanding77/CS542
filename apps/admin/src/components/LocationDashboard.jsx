@@ -72,6 +72,26 @@ export default function LocationDashboard() {
         setCombosOpen((prev) => !prev);
     };
 
+    const renderOrderContents = (order) => {
+        const items = order.orderItems?.map(oi => oi.item?.name) || [];
+        const combos = order.orderCombos?.map(oc => oc.combo?.name) || [];
+
+        return [...items, ...combos];
+    };
+
+    const updateOrderStatus = async (orderId, status) => {
+        await fetch(`http://localhost:3000/api/orders/update-status/${orderId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ status }),
+        });
+
+        fetchDashboard();
+    };
+
     if (!data) {
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -261,11 +281,67 @@ export default function LocationDashboard() {
 
                         <div className="flex flex-col gap-2">
                             {data.orders.inProgress.map((order) => (
-                                <div key={order.id} className="flex justify-between border p-3 rounded-lg">
-                                    <span>{order.id}</span>
-                                    <button className="text-sm text-green-600 hover:underline">
-                                        Mark Completed
-                                    </button>
+                                <div
+                                    key={order.id}
+                                    className="border p-4 rounded-lg flex flex-col gap-3"
+                                >
+                                    {/* TOP ROW */}
+                                    <div className="flex justify-between items-center">
+                    <span className="font-medium">
+                        Order #{order.id.slice(0, 6)}
+                    </span>
+
+                                        {/* STATUS BADGE */}
+                                        <span
+                                            className={`text-xs px-2 py-1 rounded font-medium ${
+                                                order.status === 'OPEN'
+                                                    ? 'bg-red-100 text-red-700'
+                                                    : order.status === 'FINISHED'
+                                                        ? 'bg-yellow-100 text-yellow-700'
+                                                        : 'bg-gray-100 text-gray-700'
+                                            }`}
+                                        >
+                        {order.status}
+                    </span>
+                                    </div>
+
+                                    {/* ITEMS + COMBOS */}
+                                    <div className="text-sm text-gray-700">
+                                        {renderOrderContents(order).length > 0 ? (
+                                            <ul className="list-disc ml-5">
+                                                {renderOrderContents(order).map((name, idx) => (
+                                                    <li key={idx}>{name}</li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <span className="text-gray-400">No items</span>
+                                        )}
+                                    </div>
+
+                                    {/* ACTIONS */}
+                                    <div className="flex gap-2 pt-2">
+                                        {order.status === 'OPEN' && (
+                                            <button
+                                                onClick={() =>
+                                                    updateOrderStatus(order.id, 'FINISHED')
+                                                }
+                                                className="text-sm text-blue-600 hover:underline"
+                                            >
+                                                Mark Finished
+                                            </button>
+                                        )}
+
+                                        {order.status === 'FINISHED' && (
+                                            <button
+                                                onClick={() =>
+                                                    updateOrderStatus(order.id, 'PAID')
+                                                }
+                                                className="text-sm text-green-600 hover:underline"
+                                            >
+                                                Mark Paid
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -276,13 +352,31 @@ export default function LocationDashboard() {
 
                         <div className="flex flex-col gap-2 text-gray-600">
                             {data.orders.completed.map((order) => (
-                                <div key={order.id} className="border p-3 rounded-lg">
-                                    {order.id}
+                                <div key={order.id} className="border p-3 rounded-lg flex justify-between items-center">
+
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-black">
+                                            Order #{order.id.slice(0, 6)}
+                                        </span>
+
+                                        <span className="text-sm text-gray-500">
+                                            Created: {new Date(order.created_at).toLocaleString()}
+                                        </span>
+
+                                        <span className="text-sm text-gray-500">
+                                            Finished: {order.endTime
+                                            ? new Date(order.endTime).toLocaleString()
+                                            : '—'}
+                                        </span>
+                                    </div>
+
+                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                                        PAID
+                                    </span>
                                 </div>
                             ))}
                         </div>
                     </section>
-
                 </div>
             </main>
         </div>

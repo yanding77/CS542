@@ -143,11 +143,11 @@ export class LocationsService {
         });
 
         const inProgressOrders = orders.filter(
-            (o) => o.status !== 'completed'
+            (o) => o.status !== 'PAID'
         );
 
         const completedOrders = orders.filter(
-            (o) => o.status === 'completed'
+            (o) => o.status === 'PAID'
         );
 
         return {

@@ -2,9 +2,8 @@ import {
     Controller,
     Get,
     Param,
-    Patch,
     Body,
-    UseGuards,
+    UseGuards, Post,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { OrdersService } from './orders.service';
@@ -22,7 +21,7 @@ export class OrdersController {
 
     // PATCH /orders/:orderId/status
     @UseGuards(AuthGuard('jwt'))
-    @Patch(':orderId/status')
+    @Post('update-status/:orderId')
     updateStatus(
         @Param('orderId') orderId: string,
         @Body() body: { status: string },

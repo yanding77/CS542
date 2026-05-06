@@ -20,7 +20,11 @@ export class OrdersService {
                 orderItems: {
                     item: true,
                 },
+                orderCombos: {
+                    combo: true,
+                },
                 tableOrders: true,
+                location: true,
             },
             order: {
                 created_at: 'DESC',
@@ -30,12 +34,29 @@ export class OrdersService {
 
     // PATCH order status
     async updateOrderStatus(orderId: string, status: string) {
-        await this.orderRepo.update(orderId, { status });
+        const order = await this.orderRepo.findOne({
+            where: { id: orderId },
+        });
+
+        if (!order) {
+            throw new Error('Order not found');
+        }
+
+        order.status = status;
+
+        // ✅ If order becomes PAID, stamp endTime
+        if (status === 'PAID') {
+            order.endTime = new Date();
+        }
+
+        await this.orderRepo.save(order);
 
         return this.orderRepo.findOne({
             where: { id: orderId },
             relations: {
                 orderItems: { item: true },
+                orderCombos: { combo: true },
+                tableOrders: true,
             },
         });
     }
@@ -45,8 +66,8 @@ export class OrdersService {
         const orders = await this.getOrdersByLocation(locationId);
 
         return {
-            inProgress: orders.filter(o => o.status !== 'completed'),
-            completed: orders.filter(o => o.status === 'completed'),
+            inProgress: orders.filter(o => o.status !== 'PAID'),
+            completed: orders.filter(o => o.status === 'PAID'),
         };
     }
 }

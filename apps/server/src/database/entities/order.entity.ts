@@ -2,6 +2,7 @@ import {Entity, Column, JoinColumn, CreateDateColumn, ManyToOne, PrimaryGenerate
 import {Location} from "./location.entity";
 import {TableOrder} from "./table_order.entity";
 import {OrderItem} from "./order_item.entity";
+import {OrderCombo} from "./order_combo.entity";
 
 @Entity('orders')
 export class Order {
@@ -19,10 +20,14 @@ export class Order {
         { nullable: true })
     orderItems: OrderItem[];
 
-    @Column()
+    @OneToMany(() => OrderCombo, (orderCombo) => orderCombo.order,
+        { nullable: true })
+    orderCombos: OrderCombo[];
+
+    @Column({ type: 'timestamptz', default: () => 'NOW()' })
     startTime: Date;
 
-    @Column()
+    @Column({ type: 'timestamptz', nullable: true })
     endTime: Date;
 
     @Column()
