@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MenuForm from '../components/MenuForm';
+import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline/index.js";
 
 export default function MenusPage() {
     const { locationId } = useParams();
@@ -46,6 +47,27 @@ export default function MenusPage() {
         fetchMenus();
     };
 
+    const handleDelete = async (menuId) => {
+        if (!window.confirm('Delete this menu?')) return;
+
+        const res = await fetch(
+            `http://localhost:3000/api/menus/delete/${menuId}`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (!res.ok) {
+            alert('Failed to delete menu');
+            return;
+        }
+
+        fetchMenus();
+    };
+
     return (
         <div className="min-h-screen bg-neutral-800 flex items-center justify-center p-6">
             <div className="w-full max-w-[900px] flex flex-col gap-6">
@@ -85,6 +107,25 @@ export default function MenusPage() {
                             <div className="text-sm text-slate-500">
                                 {menu.menuItems?.length || 0} items •{" "}
                                 {menu.menuCombos?.length || 0} combos
+                            </div>
+
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() =>
+                                        navigate(`/owner/menus/edit/${menu.id}`)
+                                    }
+                                    className="p-2 border border-slate-300 rounded-lg hover:bg-slate-100 transition"
+                                >
+                                    <PencilSquareIcon className="w-5 h-5 text-slate-600" />
+                                </button>
+
+                                {/* DELETE */}
+                                <button
+                                    onClick={() => handleDelete(menu.id)}
+                                    className="p-2 border border-slate-300 rounded-lg hover:bg-red-100 transition"
+                                >
+                                    <TrashIcon className="w-5 h-5 text-red-500" />
+                                </button>
                             </div>
                         </div>
                     ))}

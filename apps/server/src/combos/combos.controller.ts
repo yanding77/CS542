@@ -22,19 +22,19 @@ export class CombosController {
     }
 
     @Get('/get/:id')
-    getItem(@Req() req, @Param('id') id: string) {
+    getCombo(@Req() req, @Param('id') id: string) {
         return this.comboService.getCombo(id);
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Post('/update/:id')
-    updateItem(@Req() req, @Param('id') id: string, @Body() body) {
+    updateCombo(@Req() req, @Param('id') id: string, @Body() body) {
         return this.comboService.updateCombo(id, body);
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Post('/delete/:id')
-    deleteItem(@Req() req, @Param('id') id: string) {
+    deleteCombo(@Req() req, @Param('id') id: string) {
         return this.comboService.deleteCombo(id);
     }
 }

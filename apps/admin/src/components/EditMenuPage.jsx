@@ -1,52 +1,51 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import DealForm from '../components/DealForm';
+import MenuForm from '../components/MenuForm';
 
-export default function EditDealPage() {
-    const { dealId } = useParams();
-    const navigate = useNavigate();
+export default function EditMenuPage() {
+    const { menuId } = useParams();
+    const [menu, setMenu] = useState(null);
     const token = localStorage.getItem('jwt');
-
-    const [deal, setDeal] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchDeal = async () => {
+        const fetchMenu = async () => {
             const res = await fetch(
-                `http://localhost:3000/api/deals/get/${dealId}`,
+                `http://localhost:3000/api/menus/get/${menuId}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
 
             const data = await res.json();
-            setDeal(data);
+            setMenu(data);
         };
 
-        fetchDeal();
-    }, [dealId]);
+        fetchMenu();
+    }, [menuId]);
 
-    const updateDeal = async (payload) => {
+    const updateMenu = async (formData) => {
         const res = await fetch(
-            `http://localhost:3000/api/deals/update/${dealId}`,
+            `http://localhost:3000/api/menus/update/${menuId}`,
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify(formData),
             }
         );
 
         if (!res.ok) {
-            alert('Failed to update deal');
+            alert('Failed to update menu');
             return;
         }
 
         navigate(-1);
     };
 
-    if (!deal) return <div className="text-white p-6">Loading...</div>;
+    if (!menu) return <div>Loading...</div>;
 
     return (
         <div className="min-h-screen bg-neutral-800 flex items-center justify-center p-6">
@@ -54,9 +53,9 @@ export default function EditDealPage() {
                 {/* HEADER CARD */}
                 <div className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex justify-between items-center">
                     <div>
-                        <h2 className="text-xl font-semibold">Deals</h2>
-                        <p className="text-sm text-gray-500">
-                            Manage deals for this location
+                        <h2 className="text-xl font-semibold">Menus</h2>
+                        <p className="text-sm text-slate-500">
+                            Manage menus for this location
                         </p>
                     </div>
 
@@ -70,10 +69,10 @@ export default function EditDealPage() {
                     </button>
                 </div>
 
-                <DealForm
-                    onSubmit={updateDeal}
-                    locationId={deal?.location?.id}
-                    initialData={deal}
+                <MenuForm
+                    locationId={menu.location?.id}
+                    initialData={menu}
+                    onSubmit={updateMenu}
                     isEdit={true}
                 />
             </div>

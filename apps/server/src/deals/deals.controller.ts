@@ -19,19 +19,19 @@ export class DealsController {
     }
 
     @Get('/get/:id')
-    getItem(@Req() req, @Param('id') id: string) {
+    getDeal(@Req() req, @Param('id') id: string) {
         return this.dealsService.getDeal(id);
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Post('/update/:id')
-    updateItem(@Req() req, @Param('id') id: string, @Body() body) {
+    updateDeal(@Req() req, @Param('id') id: string, @Body() body) {
         return this.dealsService.updateDeal(id, body);
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Post('/delete/:id')
-    deleteItem(@Req() req, @Param('id') id: string) {
+    deleteDeal(@Req() req, @Param('id') id: string) {
         return this.dealsService.deleteDeal(id);
     }
 }
