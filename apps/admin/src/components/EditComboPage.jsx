@@ -30,7 +30,7 @@ export default function EditComboPage() {
 
     const updateCombo = async (formData) => {
         const res = await fetch(
-            `http://localhost:3000/api/combos/delete/${comboId}`,
+            `http://localhost:3000/api/combos/update/${comboId}`,
             {
                 method: 'POST',
                 headers: {
