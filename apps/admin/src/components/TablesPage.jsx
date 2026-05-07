@@ -1,57 +1,71 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import ComboForm from '../components/ComboForm';
+import TableForm from '../components/TableForm';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 
-export default function ComboPage() {
+export default function TablesPage() {
     const { locationId } = useParams();
-    const [combos, setCombos] = useState([]);
+    const [tables, setTables] = useState([]);
 
     const token = localStorage.getItem('jwt');
     const navigate = useNavigate();
 
-    const fetchCombos = async () => {
+    // -----------------------------
+    // FETCH TABLES
+    // -----------------------------
+    const fetchTables = async () => {
         const res = await fetch(
-            `http://localhost:3000/api/combos/${locationId}`,
+            `http://localhost:3000/api/tables/${locationId}`,
             {
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
 
         const data = await res.json();
-        setCombos(Array.isArray(data) ? data : []);
+        setTables(Array.isArray(data) ? data : []);
     };
 
     useEffect(() => {
-        fetchCombos();
+        fetchTables();
     }, []);
 
-    const createCombo = async (formData) => {
+    // -----------------------------
+    // CREATE TABLE
+    // -----------------------------
+    const createTable = async (formData, resetForm) => {
+
         const res = await fetch(
-            'http://localhost:3000/api/combos/create',
+            'http://localhost:3000/api/tables/create',
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    locationId,
+                }),
             }
         );
 
         if (!res.ok) {
-            alert('Failed to create combo');
+            alert('Failed to create table');
             return;
         }
 
-        fetchCombos();
+        resetForm();
+        fetchTables();
     };
 
-    const handleDelete = async (comboId) => {
-        if (!window.confirm('Delete this combo?')) return;
+    // -----------------------------
+    // DELETE TABLE
+    // -----------------------------
+    const handleDelete = async (tableId) => {
+        if (!window.confirm('Delete this table?')) return;
 
         const res = await fetch(
-            `http://localhost:3000/api/combos/delete/${comboId}`,
+            `http://localhost:3000/api/tables/delete/${tableId}`,
             {
                 method: 'POST',
                 headers: {
@@ -61,13 +75,16 @@ export default function ComboPage() {
         );
 
         if (!res.ok) {
-            alert('Failed to delete combo');
+            alert('Failed to delete table');
             return;
         }
 
-        fetchCombos();
+        fetchTables();
     };
 
+    // -----------------------------
+    // RENDER
+    // -----------------------------
     return (
         <div className="min-h-screen bg-neutral-800 flex items-center justify-center p-6">
             <div className="w-full max-w-[900px] flex flex-col gap-6">
@@ -75,9 +92,9 @@ export default function ComboPage() {
                 {/* HEADER CARD */}
                 <div className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex justify-between items-center">
                     <div>
-                        <h2 className="text-xl font-semibold">Combos</h2>
+                        <h2 className="text-xl font-semibold">Tables</h2>
                         <p className="text-sm text-gray-500">
-                            Manage combo deals for this location
+                            Manage tables for this location
                         </p>
                     </div>
 
@@ -92,57 +109,58 @@ export default function ComboPage() {
                 </div>
 
                 {/* FORM */}
-                <ComboForm
-                    locationId={locationId}
-                    onSubmit={createCombo}
-                />
+                <TableForm onSubmit={createTable} />
 
-                {/* EXISTING COMBOS */}
+                {/* EXISTING TABLES */}
                 <div className="bg-white border border-slate-200 rounded-xl shadow-md p-6 flex flex-col gap-3">
                     <h3 className="text-lg font-semibold">
-                        Existing Combos
+                        Existing Tables
                     </h3>
 
-                    {combos.length === 0 ? (
-                        <p className="text-sm text-gray-500">
-                            No combos created yet.
-                        </p>
-                    ) : (
-                        combos.map((combo) => (
+                    <div className="flex flex-col gap-3">
+                        {tables.map((table) => (
                             <div
-                                key={combo.id}
-                                className="border border-slate-200 rounded-lg p-4 flex justify-between items-center"
+                                key={table.id}
+                                className="bg-white border border-slate-200 rounded-lg p-4 flex justify-between items-center"
                             >
+                                {/* LEFT SIDE */}
                                 <div>
-                                    <p className="font-medium">{combo.name}</p>
-                                    <p className="text-sm text-gray-500">
-                                        ${combo.price}
-                                    </p>
+                                    <div className="font-semibold">
+                                        Table {table.tableid}
+                                    </div>
+
+                                    <div className="text-sm text-slate-500">
+                                        QR: {table.qrCodeData}
+                                    </div>
                                 </div>
 
-                                <div className="flex items-center gap-3">
-                                    {/* EDIT */}
+                                {/* ACTIONS */}
+                                <div className="flex items-center gap-4">
+
                                     <button
                                         onClick={() =>
-                                            navigate(`/owner/combos/edit/${combo.id}`)
+                                            navigate(
+                                                `/owner/tables/edit/${table.id}`
+                                            )
                                         }
                                         className="p-2 border border-slate-300 rounded-lg hover:bg-slate-100 transition"
                                     >
                                         <PencilSquareIcon className="w-5 h-5 text-slate-600" />
                                     </button>
 
-                                    {/* DELETE */}
                                     <button
-                                        onClick={() => handleDelete(combo.id)}
+                                        onClick={() => handleDelete(table.id)}
                                         className="p-2 border border-slate-300 rounded-lg hover:bg-red-100 transition"
                                     >
                                         <TrashIcon className="w-5 h-5 text-red-500" />
                                     </button>
+
                                 </div>
                             </div>
-                        ))
-                    )}
+                        ))}
+                    </div>
                 </div>
+
             </div>
         </div>
     );

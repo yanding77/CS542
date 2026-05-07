@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 
-export default function MenuForm({ locationId, onSubmit }) {
+export default function MenuForm({ locationId, onSubmit, initialData, isEdit = false }) {
     const [formData, setFormData] = useState({
         name: '',
     });
@@ -15,6 +15,30 @@ export default function MenuForm({ locationId, onSubmit }) {
     const [openComboSection, setOpenComboSection] = useState(false);
 
     const token = localStorage.getItem('jwt');
+
+    useEffect(() => {
+        if (!initialData) return;
+
+        const menuItems = Array.isArray(initialData.menuItems)
+            ? initialData.menuItems
+            : [];
+
+        const menuCombos = Array.isArray(initialData.menuCombos)
+            ? initialData.menuCombos
+            : [];
+
+        setFormData({
+            name: initialData.name || '',
+        });
+
+        setSelectedItems(
+            menuItems.map(m => m.item?.id ?? m.itemId)
+        );
+
+        setSelectedCombos(
+            menuCombos.map(c => c.combo?.id ?? c.comboId)
+        );
+    }, [initialData]);
 
     // Fetch items + combos
     useEffect(() => {
@@ -214,9 +238,9 @@ export default function MenuForm({ locationId, onSubmit }) {
             {/* SUBMIT */}
             <button
                 type="submit"
-                className="w-full bg-black text-white py-2 rounded-lg hover:bg-slate-800 transition"
+                className="bg-black text-white rounded-lg py-3 hover:bg-gray-800 transition"
             >
-                Create Menu
+                {isEdit ? 'Update Menu' : 'Create Menu'}
             </button>
         </form>
     );

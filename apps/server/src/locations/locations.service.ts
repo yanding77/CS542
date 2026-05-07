@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Location } from '../database/entities/location.entity';
 import { Owner } from '../database/entities/owner.entity';
 import * as bcrypt from 'bcrypt';
-import {Order} from "../database/entities/order.entity";
+import { Order } from "../database/entities/order.entity";
 
 @Injectable()
 export class LocationsService {
@@ -17,7 +17,7 @@ export class LocationsService {
 
         @InjectRepository(Order)
         private orderRepo: Repository<Order>,
-    ) {}
+    ) { }
 
     async createLocation(
         username: string,
@@ -41,6 +41,76 @@ export class LocationsService {
 
     async findLocationByUsername(username: string) {
         return this.locationRepo.findOne({ where: { username: username } });
+    }
+
+    async findLocationById(id: string) {
+        return this.locationRepo.findOne({ where: { id: id } });
+    }
+
+    async updateLocation(locationId: string, updateData: {
+        username?: string;
+        address?: string;
+    }) {
+        const location = await this.locationRepo.findOne({
+            where: { id: locationId },
+        });
+
+        if (!location) {
+            throw new Error('Location not found');
+        }
+
+        if (updateData.username && updateData.username !== location.username) {
+            const existing = await this.locationRepo.findOne({
+                where: { username: updateData.username },
+            });
+
+            if (existing) {
+                throw new Error('Username already in use');
+            }
+
+            location.username = updateData.username;
+        }
+
+        if (updateData.address !== undefined) {
+            location.address = updateData.address;
+        }
+
+        return await this.locationRepo.save(location);
+    }
+
+    async updatePassword(locationId: string, body: { newPassword: string }) {
+        const location = await this.locationRepo.findOne({
+            where: { id: locationId },
+        });
+
+        const newPassword = body.newPassword;
+
+        if (!location) {
+            throw new Error('Location not found');
+        }
+
+        location.password_hash = await bcrypt.hash(newPassword, 10);
+
+        await this.locationRepo.save(location);
+
+        return { message: 'Password updated successfully' };
+    }
+
+    async deleteLocation(id: string) {
+        const location = await this.locationRepo.findOne({
+            where: { id },
+        });
+
+        if (!location) {
+            throw new Error(`Location with id ${id} not found`);
+        }
+
+        await this.locationRepo.delete(id);
+
+        return {
+            success: true,
+            message: `Location ${id} deleted successfully`,
+        };
     }
 
     async getDashboard(locationId: string) {
@@ -73,11 +143,11 @@ export class LocationsService {
         });
 
         const inProgressOrders = orders.filter(
-            (o) => o.status !== 'completed'
+            (o) => o.status !== 'PAID'
         );
 
         const completedOrders = orders.filter(
-            (o) => o.status === 'completed'
+            (o) => o.status === 'PAID'
         );
 
         return {

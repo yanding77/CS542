@@ -59,4 +59,74 @@ export class CombosService {
             .where('combo.locationId = :locationId', { locationId })
             .getMany();
     }
+
+    async getCombo(id: string) {
+        return this.comboRepo.findOne({
+            where: { id: id },
+            relations: {
+                comboItems: { item: true },
+                location: true,
+            },
+        });
+    }
+
+    async updateCombo(id: string, dto: CreateComboDto) {
+        const { name, price, locationId, items } = dto;
+
+        // 1. Check combo exists
+        const existing = await this.comboRepo.findOne({
+            where: { id },
+        });
+
+        if (!existing) {
+            throw new Error(`Combo with id ${id} not found`);
+        }
+
+        // 2. Update base combo
+        await this.comboRepo.update(id, {
+            name,
+            price,
+            location: { id: locationId },
+        });
+
+        // 3. Remove old item relations
+        await this.comboItemRepo.delete({ comboId: id });
+
+        // 4. Insert new item relations
+        if (items?.length) {
+            const comboItems = items.map((itemId) =>
+                this.comboItemRepo.create({
+                    comboId: id,
+                    itemId,
+                })
+            );
+
+            await this.comboItemRepo.save(comboItems);
+        }
+
+        // 5. Return updated combo
+        return this.comboRepo.findOne({
+            where: { id },
+            relations: {
+                comboItems: { item: true },
+            },
+        });
+    }
+
+    async deleteCombo(id: string) {
+        const combo = await this.comboRepo.findOne({
+            where: { id },
+        });
+
+        if (!combo) {
+            throw new Error(`Combo with id ${id} not found`);
+        }
+
+        await this.comboRepo.delete(id);
+
+        return {
+            success: true,
+            message: `Combo ${id} deleted successfully`,
+        };
+    }
 }

@@ -74,4 +74,61 @@ export class MenusService {
 
         return savedMenu;
     }
+
+    async getMenu(id: string) {
+        return this.menuRepo.findOne({
+            where: { id },
+            relations: {
+                menuItems: { item: true },
+                menuCombos: { combo: true },
+                location: true
+            },
+        });
+    }
+
+    async updateMenu(id: string, dto: CreateMenuDto) {
+        const { name, items, combos } = dto;
+
+        const menu = await this.menuRepo.findOne({ where: { id } });
+        if (!menu) throw new Error('Menu not found');
+
+        // update base
+        menu.name = name;
+        await this.menuRepo.save(menu);
+
+        // clear joins
+        await this.menuItemRepo.delete({ menuId: id });
+        await this.menuComboRepo.delete({ menuId: id });
+
+        // re-create items
+        const menuItems = (items || []).map(itemId =>
+            this.menuItemRepo.create({ menuId: id, itemId })
+        );
+
+        const menuCombos = (combos || []).map(comboId =>
+            this.menuComboRepo.create({ menuId: id, comboId })
+        );
+
+        await this.menuItemRepo.save(menuItems);
+        await this.menuComboRepo.save(menuCombos);
+
+        return this.getMenu(id);
+    }
+
+    async deleteMenu(id: string) {
+        const menu = await this.menuRepo.findOne({
+            where: { id },
+        });
+
+        if (!menu) {
+            throw new Error(`Menu with id ${id} not found`);
+        }
+
+        await this.menuRepo.delete(id);
+
+        return {
+            success: true,
+            message: `Menu ${id} deleted successfully`,
+        };
+    }
 }

@@ -12,6 +12,13 @@ import ItemsPage from "./components/ItemsPage.jsx";
 import CombosPage from "./components/CombosPage.jsx";
 import DealsPage from "./components/DealsPage.jsx";
 import MenusPage from "./components/MenusPage.jsx";
+import EditItemPage from "./components/EditItemPage.jsx";
+import EditComboPage from "./components/EditComboPage.jsx";
+import EditDealPage from "./components/EditDealPage.jsx";
+import EditMenuPage from "./components/EditMenuPage.jsx";
+import LocationSettings from "./components/LocationSettings.jsx";
+import TablesPage from "./components/TablesPage.jsx";
+import EditTablePage from "./components/EditTablePage.jsx";
 
 function App() {
     return (
@@ -89,6 +96,62 @@ function App() {
                 element={
                     <ProtectedRoute allowedRole={["owner"]}>
                         <MenusPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/location/:locationId/tables"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <TablesPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/items/edit/:itemId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditItemPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/combos/edit/:comboId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditComboPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/deals/edit/:dealId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditDealPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/menus/edit/:menuId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditMenuPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/tables/edit/:tableId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditTablePage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/location/:locationId/settings"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <LocationSettings />
                     </ProtectedRoute>
                 }
             />

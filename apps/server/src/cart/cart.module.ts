@@ -9,6 +9,7 @@ import { CartGateway } from './cart.gateway';
 @Module({
   imports: [TypeOrmModule.forFeature([Item, Table])],
   providers: [CartService, CartGateway],
-  controllers: [CartController]
+  controllers: [CartController],
+  exports: [CartService],
 })
 export class CartModule { }
