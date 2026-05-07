@@ -1,8 +1,8 @@
-import {Entity, Column, JoinColumn, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
-import {Location} from "./location.entity";
-import {TableOrder} from "./table_order.entity";
-import {OrderItem} from "./order_item.entity";
-import {OrderCombo} from "./order_combo.entity";
+import { Entity, Column, JoinColumn, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Location } from "./location.entity";
+import { TableOrder } from "./table_order.entity";
+import { OrderItem } from "./order_item.entity";
+import { OrderCombo } from "./order_combo.entity";
 
 @Entity('orders')
 export class Order {
