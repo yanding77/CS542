@@ -1,7 +1,7 @@
-import {Entity, Column, JoinColumn, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
-import {Location} from "./location.entity";
-import {TableOrder} from "./table_order.entity";
-import {OrderItem} from "./order_item.entity";
+import { Entity, Column, JoinColumn, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Location } from "./location.entity";
+import { TableOrder } from "./table_order.entity";
+import { OrderItem } from "./order_item.entity";
 
 @Entity('orders')
 export class Order {
@@ -19,10 +19,10 @@ export class Order {
         { nullable: true })
     orderItems: OrderItem[];
 
-    @Column()
+    @Column({ type: 'timestamptz', default: () => 'NOW()' })
     startTime: Date;
 
-    @Column()
+    @Column({ type: 'timestamptz', nullable: true })
     endTime: Date;
 
     @Column()
