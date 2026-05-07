@@ -47,6 +47,10 @@ export class LocationsService {
         return this.locationRepo.findOne({ where: { id: id } });
     }
 
+    async findLocationBySlug(slug: string) {
+        return this.locationRepo.findOne({ where: { username: slug } });
+    }
+
     async updateLocation(locationId: string, updateData: {
         username?: string;
         address?: string;

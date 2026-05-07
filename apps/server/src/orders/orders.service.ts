@@ -46,7 +46,7 @@ export class OrdersService {
                 location: { id: table.locationId },
                 startTime: now,
                 endTime: now, // placeholder — updated when completed
-                status: 'pending',
+                status: 'OPEN',
             });
             const savedOrder = await manager.save(order);
 
