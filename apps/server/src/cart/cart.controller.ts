@@ -11,8 +11,7 @@ export class CartController {
         return this.cartService.getCart(tableId);
     }
 
-    // unused cart endpoints
-    /* @Patch(':tableId/add')
+    @Patch(':tableId/add')
     addItem(@Param('tableId') tableId: string, @Body() dto: ItemDTO) {
         return this.cartService.addItem(tableId, dto);
     }
@@ -23,5 +22,4 @@ export class CartController {
     ) {
         return this.cartService.removeItem(tableId, dto);
     }
-    */
 }
