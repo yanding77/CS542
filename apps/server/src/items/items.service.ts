@@ -55,9 +55,22 @@ export class ItemsService {
     async getSlug(slug: string) {
         return this.itemRepo.find({
             where: {
-                location: { username: slug },
+                location: { id: slug },
             },
         });
+    }
+
+    async getItem(id: string) {
+        return this.itemRepo.findOne({
+            where: {
+                id: id,
+            },
+            relations: {
+                itemAllergens: {
+                    allergen: true
+                }
+            }
+        })
     }
 
     async createItem(dto: CreateItemDto) {
@@ -160,5 +173,133 @@ export class ItemsService {
                 itemAllergens: true,
             },
         });
+    }
+
+    async updateItem(id: string, dto: CreateItemDto) {
+        const {
+            name,
+            price,
+            category,
+            allergens,
+            description,
+            prepTime,
+            alcoholContent,
+            refillable,
+            image,
+        } = dto;
+
+        // 1. Find existing item
+        const existingItem = await this.itemRepo.findOne({
+            where: { id },
+        });
+
+        if (!existingItem) {
+            throw new Error(`Item with id ${id} not found`);
+        }
+
+        // 2. Update base item
+        await this.itemRepo.update(id, {
+            name,
+            price,
+            category,
+            image,
+        });
+
+        // 3. Replace allergens (delete old, insert new)
+        await this.itemAllergenRepo.delete({ itemId: id });
+
+        if (allergens?.length) {
+            const allergenEntities = await this.allergenRepo.findBy({
+                id: In(allergens),
+            });
+
+            const itemAllergens = allergenEntities.map((allergen) =>
+                this.itemAllergenRepo.create({
+                    itemId: id,
+                    allergenId: allergen.id,
+                }),
+            );
+
+            await this.itemAllergenRepo.save(itemAllergens);
+        }
+
+        // 4. Update subtype
+        switch (category) {
+            case ItemCategory.ALCOHOL:
+                await this.alcoholRepo.save({
+                    id,
+                    item: { id },
+                    alcoholContent: Number(alcoholContent),
+                });
+                break;
+
+            case ItemCategory.APPETIZER:
+                await this.appetizerRepo.save({
+                    id,
+                    item: { id },
+                    description,
+                });
+                break;
+
+            case ItemCategory.DESSERT:
+                await this.dessertRepo.save({
+                    id,
+                    item: { id },
+                    description,
+                    prepTime: prepTime ? Number(prepTime) : null,
+                });
+                break;
+
+            case ItemCategory.DRINK:
+                await this.drinkRepo.save({
+                    id,
+                    item: { id },
+                    refillable: Boolean(refillable),
+                });
+                break;
+
+            case ItemCategory.ENTREE:
+                await this.entreeRepo.save({
+                    id,
+                    item: { id },
+                    description,
+                });
+                break;
+
+            case ItemCategory.SIDE:
+                await this.sideRepo.save({
+                    id,
+                    item: { id },
+                });
+                break;
+
+            default:
+                throw new Error(`Invalid category: ${category}`);
+        }
+
+        // 5. Return updated item
+        return this.itemRepo.findOne({
+            where: { id },
+            relations: {
+                itemAllergens: true,
+            },
+        });
+    }
+
+    async deleteItem(id: string) {
+        const item = await this.itemRepo.findOne({
+            where: { id },
+        });
+
+        if (!item) {
+            throw new Error(`Item with id ${id} not found`);
+        }
+
+        await this.itemRepo.delete(id);
+
+        return {
+            success: true,
+            message: `Item ${id} deleted successfully`,
+        };
     }
 }

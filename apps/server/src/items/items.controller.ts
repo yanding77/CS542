@@ -21,10 +21,25 @@ export class ItemsController {
         return this.itemsService.createItem(body);
     }
 
+    @Get('/get/:id')
+    getItem(@Req() req, @Param('id') id: string) {
+        return this.itemsService.getItem(id);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('/update/:id')
+    updateItem(@Req() req, @Param('id') id: string, @Body() body) {
+        return this.itemsService.updateItem(id, body);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('/delete/:id')
+    deleteItem(@Req() req, @Param('id') id: string) {
+        return this.itemsService.deleteItem(id);
+    }
+
     @Get(':slug')
     getItemsByLocation(@Param('slug') slug: string) {
         return this.itemsService.getSlug(slug);
     }
-
-
 }

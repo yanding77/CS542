@@ -24,9 +24,6 @@ export class LocationsController {
         @Param('locationId') locationId: string,
         @Req() req
     ) {
-        console.log('USER:', req.user);
-        console.log('LOCATION ID:', locationId);
-
         const user = req.user;
 
         // LOCATION USERS -> only allowed their own dashboard
@@ -40,5 +37,28 @@ export class LocationsController {
         }
 
         throw new ForbiddenException('Invalid role');
+    }
+
+    @Get('/get/:id')
+    getLocation(@Req() req, @Param('id') id: string) {
+        return this.locationsService.findLocationById(id);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('/update/:id')
+    updateLocation(@Req() req, @Param('id') id: string, @Body() body) {
+        return this.locationsService.updateLocation(id, body);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('/updatePassword/:id')
+    updatePassword(@Req() req, @Param('id') id: string, @Body() body) {
+        return this.locationsService.updatePassword(id, body);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('/delete/:id')
+    deleteLocation(@Req() req, @Param('id') id: string) {
+        return this.locationsService.deleteLocation(id);
     }
 }

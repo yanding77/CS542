@@ -90,4 +90,65 @@ export class DealsService {
 
         return savedDeal;
     }
+
+    async getDeal(id: string) {
+        return this.dealRepo.findOne({
+            where: { id },
+            relations: {
+                dealItems: { item: true },
+                dealCombos: { combo: true },
+                location: true
+            },
+        });
+    }
+
+    async updateDeal(id: string, dto: CreateDealDto) {
+        const { name, price, startDate, endDate, items, combos } = dto;
+
+        await this.dealRepo.update(id, {
+            name,
+            price,
+            startDate,
+            endDate,
+        });
+
+        // clear old relations first (important)
+        await this.dealItemRepo.delete({ dealId: id });
+        await this.dealComboRepo.delete({ dealId: id });
+
+        if (items?.length) {
+            await this.dealItemRepo.save(
+                items.map(itemId =>
+                    this.dealItemRepo.create({ dealId: id, itemId })
+                )
+            );
+        }
+
+        if (combos?.length) {
+            await this.dealComboRepo.save(
+                combos.map(comboId =>
+                    this.dealComboRepo.create({ dealId: id, comboId })
+                )
+            );
+        }
+
+        return this.getDeal(id);
+    }
+
+    async deleteDeal(id: string) {
+        const deal = await this.dealRepo.findOne({
+            where: { id },
+        });
+
+        if (!deal) {
+            throw new Error(`Deal with id ${id} not found`);
+        }
+
+        await this.dealRepo.delete(id);
+
+        return {
+            success: true,
+            message: `Deal ${id} deleted successfully`,
+        };
+    }
 }

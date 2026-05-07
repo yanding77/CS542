@@ -20,4 +20,21 @@ export class CombosController {
     createCombo(@Req() req, @Body() body) {
         return this.comboService.createCombo(body);
     }
+
+    @Get('/get/:id')
+    getCombo(@Req() req, @Param('id') id: string) {
+        return this.comboService.getCombo(id);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('/update/:id')
+    updateCombo(@Req() req, @Param('id') id: string, @Body() body) {
+        return this.comboService.updateCombo(id, body);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Post('/delete/:id')
+    deleteCombo(@Req() req, @Param('id') id: string) {
+        return this.comboService.deleteCombo(id);
+    }
 }

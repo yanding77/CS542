@@ -23,6 +23,7 @@ import {MenuCombo} from "./entities/menu_combo.entity";
 import {DealCombo} from "./entities/deal_combo.entity";
 import {TableOrder} from "./entities/table_order.entity";
 import {OrderItem} from "./entities/order_item.entity";
+import {OrderCombo} from "./entities/order_combo.entity";
 
 @Global()
 @Module({
@@ -36,12 +37,12 @@ import {OrderItem} from "./entities/order_item.entity";
             database: process.env.DB_NAME || 'restaurantDB',
             entities: [Owner, Location, Menu, Item, Side, Entree, Drink,
                 Appetizer, Dessert, Alcohol, Allergen, Deal, Combo, Table, Order,
-                MenuItem, ComboItem, DealItem, ItemAllergen, MenuCombo, DealCombo, TableOrder, OrderItem],
+                MenuItem, ComboItem, DealItem, ItemAllergen, MenuCombo, DealCombo, TableOrder, OrderItem, OrderCombo],
             synchronize: true, // auto-create tables in dev (disable in production)
         }),
         TypeOrmModule.forFeature([Owner, Location, Menu, Item, Side, Entree, Drink,
             Appetizer, Dessert, Alcohol, Allergen, Deal, Combo, Table, Order,
-            MenuItem, ComboItem, DealItem, ItemAllergen, MenuCombo, DealCombo, TableOrder, OrderItem]),
+            MenuItem, ComboItem, DealItem, ItemAllergen, MenuCombo, DealCombo, TableOrder, OrderItem, OrderCombo]),
     ],
     exports: [TypeOrmModule],
 })

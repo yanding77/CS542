@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import ItemForm from '../components/ItemForm';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 export default function ItemsPage() {
     const { locationId } = useParams();
@@ -50,6 +51,26 @@ export default function ItemsPage() {
         fetchItems();
     };
 
+    const handleDelete = async (itemId) => {
+        if (!window.confirm('Delete this item?')) return;
+
+        const res = await fetch(`http://localhost:3000/api/items/delete/${itemId}`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!res.ok) {
+            alert('Failed to delete item');
+            return;
+        }
+
+        fetchItems();
+    };
+
+
+
     return (
         <div className="min-h-screen bg-neutral-800 flex items-center justify-center p-6">
             <div className="w-full max-w-[900px] flex flex-col gap-6">
@@ -95,8 +116,26 @@ export default function ItemsPage() {
                                     </div>
                                 </div>
 
-                                <div className="text-xs text-slate-400 capitalize">
-                                    {item.category}
+                                <div className="flex items-center gap-4">
+                                    <div className="text-xs text-slate-400 capitalize">
+                                        {item.category}
+                                    </div>
+
+                                    {/* EDIT BUTTON */}
+                                    <button
+                                        onClick={() => navigate(`/owner/items/edit/${item.id}`)}
+                                        className="p-2 border border-slate-300 rounded-lg hover:bg-slate-100 transition"
+                                    >
+                                        <PencilSquareIcon className="w-5 h-5 text-slate-600" />
+                                    </button>
+
+                                    {/* DELETE BUTTON */}
+                                    <button
+                                        onClick={() => handleDelete(item.id)}
+                                        className="p-2 border border-slate-300 rounded-lg hover:bg-red-100 transition"
+                                    >
+                                        <TrashIcon className="w-5 h-5 text-red-500" />
+                                    </button>
                                 </div>
                             </div>
                         ))}

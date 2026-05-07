@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
-export default function DealForm({ onSubmit, locationId }) {
-    const [formData, setFormData] = useState({
+export default function DealForm({ onSubmit, locationId, initialData, isEdit = false }) {
+    const [formData, setFormData] = useState(initialData || {
         name: '',
         price: '',
         startDate: '',
         endDate: '',
-        type: 'item', // 'item' | 'combo'
+        type: 'item',
         selectedItem: null,
         selectedCombo: null,
     });
@@ -15,6 +15,23 @@ export default function DealForm({ onSubmit, locationId }) {
     const [combos, setCombos] = useState([]);
 
     const token = localStorage.getItem('jwt');
+
+    useEffect(() => {
+        if (!initialData) return;
+
+        const hasItem = initialData.dealItems?.length > 0;
+        const hasCombo = initialData.dealCombos?.length > 0;
+
+        setFormData({
+            name: initialData.name || '',
+            price: initialData.price || '',
+            startDate: initialData.startDate?.slice(0, 10) || '',
+            endDate: initialData.endDate?.slice(0, 10) || '',
+            type: hasCombo ? 'combo' : 'item',
+            selectedItem: hasItem ? initialData.dealItems[0].item.id : null,
+            selectedCombo: hasCombo ? initialData.dealCombos[0].combo.id : null,
+        });
+    }, [initialData]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -111,7 +128,9 @@ export default function DealForm({ onSubmit, locationId }) {
         >
             {/* HEADER */}
             <div>
-                <h3 className="text-xl font-semibold">Create Deal</h3>
+                <h3 className="text-xl font-semibold">
+                    {isEdit ? 'Edit Deal' : 'Create Deal'}
+                </h3>
                 <p className="text-sm text-slate-500">
                     Create a promotional discount for an item or combo
                 </p>
@@ -235,9 +254,9 @@ export default function DealForm({ onSubmit, locationId }) {
             {/* SUBMIT */}
             <button
                 type="submit"
-                className="bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
+                className="bg-black text-white rounded-lg py-3 hover:bg-gray-800 transition"
             >
-                Create Deal
+                {isEdit ? 'Update Deal' : 'Create Deal'}
             </button>
         </form>
     );

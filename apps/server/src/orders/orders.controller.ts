@@ -12,7 +12,7 @@ import { OrdersService } from './orders.service';
 
 @Controller('orders')
 export class OrdersController {
-    constructor(private readonly ordersService: OrdersService) {}
+    constructor(private readonly ordersService: OrdersService) { }
 
     // POST /orders/:tableId/submit  (guest-facing, no auth)
     @Post(':tableId/submit')
@@ -29,7 +29,7 @@ export class OrdersController {
 
     // PATCH /orders/:orderId/status
     @UseGuards(AuthGuard('jwt'))
-    @Patch(':orderId/status')
+    @Post('update-status/:orderId')
     updateStatus(
         @Param('orderId') orderId: string,
         @Body() body: { status: string },

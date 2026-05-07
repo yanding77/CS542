@@ -13,6 +13,7 @@ import {Location} from "./location.entity";
 import {ComboItem} from "./combo_item.entity";
 import {MenuCombo} from "./menu_combo.entity";
 import {DealCombo} from "./deal_combo.entity";
+import {OrderCombo} from "./order_combo.entity";
 
 // combos(id, location (FK), name, comboItems (FK), menuCombos (FK), price, dealCombos (FK), created_at)
 @Entity('combos')
@@ -38,6 +39,10 @@ export class Combo {
     @OneToMany(() => DealCombo, (dealCombo) => dealCombo.combo,
         { nullable: true })
     dealCombos: DealCombo[];
+
+    @OneToMany(() => OrderCombo, (orderCombo) => orderCombo.combo,
+        { nullable: true })
+    orderCombos: OrderCombo[];
 
     @CreateDateColumn()
     created_at: Date;
