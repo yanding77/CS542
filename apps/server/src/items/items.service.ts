@@ -55,7 +55,7 @@ export class ItemsService {
     async getSlug(slug: string) {
         return this.itemRepo.find({
             where: {
-                location: { id: slug },
+                location: { username: slug },
             },
         });
     }

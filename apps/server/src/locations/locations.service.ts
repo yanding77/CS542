@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Location } from '../database/entities/location.entity';
 import { Owner } from '../database/entities/owner.entity';
 import * as bcrypt from 'bcrypt';
-import {Order} from "../database/entities/order.entity";
+import { Order } from "../database/entities/order.entity";
 
 @Injectable()
 export class LocationsService {
@@ -17,7 +17,7 @@ export class LocationsService {
 
         @InjectRepository(Order)
         private orderRepo: Repository<Order>,
-    ) {}
+    ) { }
 
     async createLocation(
         username: string,
@@ -45,10 +45,6 @@ export class LocationsService {
 
     async findLocationById(id: string) {
         return this.locationRepo.findOne({ where: { id: id } });
-    }
-
-    async findLocationBySlug(slug: string) {
-        return this.locationRepo.findOne({ where: { username: slug } });
     }
 
     async updateLocation(locationId: string, updateData: {
@@ -82,12 +78,12 @@ export class LocationsService {
         return await this.locationRepo.save(location);
     }
 
-    async updatePassword(locationId: string, body: {newPassword: string}) {
+    async updatePassword(locationId: string, body: { newPassword: string }) {
         const location = await this.locationRepo.findOne({
             where: { id: locationId },
         });
 
-        const newPassword= body.newPassword;
+        const newPassword = body.newPassword;
 
         if (!location) {
             throw new Error('Location not found');
