@@ -17,6 +17,8 @@ import EditComboPage from "./components/EditComboPage.jsx";
 import EditDealPage from "./components/EditDealPage.jsx";
 import EditMenuPage from "./components/EditMenuPage.jsx";
 import LocationSettings from "./components/LocationSettings.jsx";
+import TablesPage from "./components/TablesPage.jsx";
+import EditTablePage from "./components/EditTablePage.jsx";
 
 function App() {
     return (
@@ -98,6 +100,14 @@ function App() {
                 }
             />
             <Route
+                path="/owner/location/:locationId/tables"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <TablesPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
                 path="/owner/items/edit/:itemId"
                 element={
                     <ProtectedRoute allowedRole={["owner"]}>
@@ -126,6 +136,14 @@ function App() {
                 element={
                     <ProtectedRoute allowedRole={["owner"]}>
                         <EditMenuPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/owner/tables/edit/:tableId"
+                element={
+                    <ProtectedRoute allowedRole={["owner"]}>
+                        <EditTablePage />
                     </ProtectedRoute>
                 }
             />
