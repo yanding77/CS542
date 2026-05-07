@@ -5,7 +5,7 @@ import {
     Patch,
     Post,
     Body,
-    UseGuards, Post,
+    UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { OrdersService } from './orders.service';
