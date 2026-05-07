@@ -10,7 +10,7 @@
     "db:up": "docker-compose up -d",
     "db:down": "docker-compose down",
     "db:seed": "npm run db:seed -w server",
-    "dev:client": "npm run dev -w client",
+    "dev:client": "npm run dev -w client -- --host",
     "dev:server": "npm run start:dev -w server",
     "dev:admin": "npm run dev -w admin",
     "dev": "npm run db:up && concurrently -n \"NEST,VITE,ADMIN\" -c \"magenta,cyan\" \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:admin\"",

@@ -110,4 +110,14 @@ export class CartService implements OnModuleInit {
         cart.itemCount = cart.items.reduce((acc, item) => acc + item.quantity, 0);
         return cart;
     }
+
+    /** Reset a table's cart after order submission */
+    clearCart(tableId: string): void {
+        const cart = this.carts.get(tableId);
+        if (cart) {
+            cart.items = [];
+            cart.totalPrice = 0;
+            cart.itemCount = 0;
+        }
+    }
 }
