@@ -11,8 +11,10 @@ import { ItemDTO, TableCart } from "src/types/types";
     }
 })
 export class CartGateway {
+
     @WebSocketServer()
     server: Server;
+
     constructor(private readonly cartService: CartService) { }
 
     @SubscribeMessage('cart:join')
@@ -23,10 +25,8 @@ export class CartGateway {
         client.join(room);
 
         const cart = await this.cartService.getCart(data.tableId);
-
         client.emit('cart:updated', cart);
     }
-
     @SubscribeMessage('cart:addItem')
     async handleAddItem(
         @MessageBody() data: { tableId: string, dto: ItemDTO },
