@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRef } from "react";
 import { useCart } from "../hooks/CartHook.tsx";
 import { useSession } from '../hooks/GuestIDContext.tsx';
 
@@ -10,8 +9,24 @@ export default function Cart() {
     const constraintsRef = useRef(null);
 
     const { guestId, tableId } = useSession();
+    const [orderSubmitted, setOrderSubmitted] = useState(false);
 
-    const { cart, addItem, deleteItem } = useCart(tableId);
+    const { cart, addItem, deleteItem, submitOrder, isSubmitting } = useCart(tableId);
+
+    const handleSubmit = () => {
+        submitOrder(undefined, {
+            onSuccess: () => {
+                setOrderSubmitted(true);
+                setTimeout(() => {
+                    setOrderSubmitted(false);
+                    setIsOpen(false);
+                }, 1500);
+            },
+            onError: (err) => {
+                alert(err.message || 'Error al enviar el pedido');
+            },
+        });
+    };
 
 
 
@@ -125,11 +140,23 @@ export default function Cart() {
                                         </div>
 
                                         <motion.button
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            className="w-full mt-8 bg-[#ffcc00] hover:bg-[#e6b800] text-[#2a2a2a] font-black py-4 rounded-xl shadow-lg uppercase tracking-widest text-sm"
+                                            whileHover={!isSubmitting && !orderSubmitted ? { scale: 1.02 } : {}}
+                                            whileTap={!isSubmitting && !orderSubmitted ? { scale: 0.98 } : {}}
+                                            onClick={handleSubmit}
+                                            disabled={isSubmitting || orderSubmitted}
+                                            className={`w-full mt-8 font-black py-4 rounded-xl shadow-lg uppercase tracking-widest text-sm transition-colors ${
+                                                orderSubmitted
+                                                    ? 'bg-green-500 text-white cursor-default'
+                                                    : isSubmitting
+                                                      ? 'bg-gray-300 text-gray-500 cursor-wait'
+                                                      : 'bg-[#ffcc00] hover:bg-[#e6b800] text-[#2a2a2a]'
+                                            }`}
                                         >
-                                            Confirmar Pedido!
+                                            {orderSubmitted
+                                                ? '¡Pedido Enviado! ✓'
+                                                : isSubmitting
+                                                  ? 'Enviando...'
+                                                  : 'Confirmar Pedido!'}
                                         </motion.button>
                                     </>) :
                                     <span className="font-black text-xl uppercase tracking-tighter">Tu carrito esta vacio!</span>

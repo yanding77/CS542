@@ -57,6 +57,22 @@ export const useCart = (tableID: string) => {
         }
     });
 
+    const submitOrderMutation = useMutation({
+        mutationFn: async () => {
+            const res = await fetch(`/api/orders/${tableID}/submit`, {
+                method: "POST",
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.message || 'Failed to submit order');
+            }
+            return res.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['cart', tableID] });
+        },
+    });
+
     const quantityMap: { [key: string]: number } = {};
 
     cartQuery.data?.items.forEach(item => {
@@ -70,6 +86,8 @@ export const useCart = (tableID: string) => {
         quantityMap: quantityMap,
         addItem: addToCart.mutate,
         deleteItem: removeFromCart.mutate,
+        submitOrder: submitOrderMutation.mutate,
+        isSubmitting: submitOrderMutation.isPending,
     }
 
 }
